@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { connectSocket, getSocket } from "@/lib/socket";
 import { setupSocketListeners, useGameStore } from "@/lib/store";
 import { Room } from "@/game-engine/types";
-import { Users, LogIn, ArrowRight, Dice1, Dices } from "lucide-react";
+import { Users, LogIn, ArrowRight, Dice1, Dices, Sparkles } from "lucide-react";
 import RulesModal from "@/components/rules-modal";
 
 export default function HomePage() {
@@ -15,10 +15,7 @@ export default function HomePage() {
   const [ruleSet, setRuleSet] = useState<"basic" | "advanced">("advanced");
   const { error, setError } = useGameStore();
 
-  useEffect(() => {
-    setupSocketListeners();
-    connectSocket();
-  }, []);
+  useEffect(() => { setupSocketListeners(); connectSocket(); }, []);
 
   useEffect(() => {
     const socket = getSocket();
@@ -40,53 +37,78 @@ export default function HomePage() {
 
   return (
     <main className="min-h-dvh flex items-center justify-center p-4 bg-surface">
-      <div className="w-full max-w-md space-y-8 animate-fade-in">
-        <div className="text-center space-y-3">
-          <div className="w-20 h-20 mx-auto rounded-2xl bg-brand-glow flex items-center justify-center">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-brand-light">
-              <ellipse cx="24" cy="30" rx="18" ry="12" stroke="currentColor" strokeWidth="2" />
-              <circle cx="24" cy="16" r="8" stroke="currentColor" strokeWidth="2" />
-              <circle cx="20" cy="15" r="1.5" fill="currentColor" />
-              <circle cx="28" cy="15" r="1.5" fill="currentColor" />
-              <path d="M20 20c0 2 2 3 4 3s4-1 4-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
+      <div className="w-full max-w-md space-y-10 animate-fade-in">
+        <div className="text-center space-y-4">
+          <div className="relative inline-block">
+            <div className="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-brand/20 to-brand/5 border border-brand/20 flex items-center justify-center animate-float shadow-xl shadow-brand/10">
+              <Sparkles size={40} className="text-brand-light" />
+            </div>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-text-primary">NoWay</h1>
-          <p className="text-text-secondary text-lg">Nem Ferrando!</p>
+          <div>
+            <h1 className="text-5xl font-black text-text-primary tracking-tight">
+              NoWay
+            </h1>
+            <p className="text-text-secondary text-lg mt-1 font-medium">Nem Ferrando!</p>
+          </div>
+          <p className="text-text-muted text-sm">Jogo de blefe e curiosidades • 2-10 jogadores</p>
         </div>
 
         <div className="space-y-4">
-          <input className="w-full px-5 py-4 rounded-xl bg-surface-raised border border-white/10 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all duration-200 text-lg touch-target" placeholder="Seu nome" value={name} onChange={(e) => setName(e.target.value)} maxLength={20} />
+          <input
+            className="w-full px-5 py-4 rounded-2xl bg-surface-raised border-2 border-white/5 text-text-primary
+                       placeholder:text-text-muted/50 focus:outline-none focus:border-brand/40 focus:bg-surface-card
+                       transition-all duration-300 text-lg font-medium touch-target"
+            placeholder="Seu nome" value={name} onChange={(e) => setName(e.target.value)} maxLength={20}
+          />
 
-          <div className="flex gap-3">
-            <button onClick={() => setRuleSet("basic")} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all duration-200 touch-target ${ruleSet === "basic" ? "border-brand bg-brand/10 text-brand-light shadow-[0_0_12px_rgba(249,115,22,0.15)]" : "border-white/5 bg-surface-raised text-text-secondary hover:border-white/10 hover:text-text-primary"}`}>
-              <Dice1 size={18} />Regras Basicas
+          <div className="flex gap-2">
+            <button onClick={() => setRuleSet("basic")}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl border-2 text-sm font-bold transition-all duration-300 touch-target ${
+                ruleSet === "basic" ? "border-brand/50 bg-brand/10 text-brand-light shadow-lg shadow-brand/10" : "border-white/5 bg-surface-raised text-text-muted hover:border-white/10"
+              }`}>
+              <Dice1 size={18} />Basico
             </button>
-            <button onClick={() => setRuleSet("advanced")} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-all duration-200 touch-target ${ruleSet === "advanced" ? "border-brand bg-brand/10 text-brand-light shadow-[0_0_12px_rgba(249,115,22,0.15)]" : "border-white/5 bg-surface-raised text-text-secondary hover:border-white/10 hover:text-text-primary"}`}>
-              <Dices size={18} />Regras Avancadas
+            <button onClick={() => setRuleSet("advanced")}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl border-2 text-sm font-bold transition-all duration-300 touch-target ${
+                ruleSet === "advanced" ? "border-brand/50 bg-brand/10 text-brand-light shadow-lg shadow-brand/10" : "border-white/5 bg-surface-raised text-text-muted hover:border-white/10"
+              }`}>
+              <Dices size={18} />Avancado
             </button>
           </div>
 
-          <button onClick={handleCreate} className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-brand hover:bg-brand/90 active:scale-[0.98] text-black font-semibold text-lg transition-all duration-200 touch-target shadow-lg shadow-brand/25">
+          <button onClick={handleCreate}
+            className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-2xl
+                       bg-gradient-to-r from-brand to-brand-dark hover:from-brand-light hover:to-brand
+                       active:scale-[0.98] text-black font-black text-lg
+                       transition-all duration-200 touch-target shadow-2xl shadow-brand/30">
             <Users size={22} />Criar Sala<ArrowRight size={18} />
           </button>
 
           <div className="flex items-center gap-3">
             <div className="flex-1 h-px bg-white/5" />
-            <span className="text-text-muted text-sm">ou entre em uma sala</span>
+            <span className="text-text-muted text-xs font-medium">ou entre em uma sala</span>
             <div className="flex-1 h-px bg-white/5" />
           </div>
 
-          <div className="flex gap-3">
-            <input className="flex-1 px-5 py-4 rounded-xl bg-surface-raised border border-white/10 text-text-primary placeholder:text-text-muted text-center text-lg font-mono tracking-[0.3em] uppercase focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all duration-200 touch-target" placeholder="CODIGO" value={roomCode} onChange={(e) => setRoomCode(e.target.value)} maxLength={6} />
-            <button onClick={handleJoin} className="px-6 py-4 rounded-xl bg-surface-raised hover:bg-surface-card border border-white/10 hover:border-brand/30 text-text-primary font-semibold text-lg transition-all duration-200 active:scale-[0.98] touch-target">
+          <div className="flex gap-2">
+            <input
+              className="flex-1 px-5 py-4 rounded-2xl bg-surface-raised border-2 border-white/5 text-text-primary
+                         placeholder:text-text-muted/50 text-center text-lg font-mono font-bold tracking-[0.4em] uppercase
+                         focus:outline-none focus:border-brand/40 transition-all duration-300 touch-target"
+              placeholder="CODIGO" value={roomCode} onChange={(e) => setRoomCode(e.target.value)} maxLength={6}
+            />
+            <button onClick={handleJoin}
+              className="px-7 py-4 rounded-2xl bg-surface-raised hover:bg-surface-card border-2 border-white/5 hover:border-brand/30
+                         text-text-primary font-bold text-lg transition-all duration-200 active:scale-[0.98] touch-target">
               <LogIn size={22} />
             </button>
           </div>
         </div>
 
         {error ? (
-          <div className="px-5 py-4 rounded-xl bg-accent-danger/10 border border-accent-danger/20 text-accent-danger text-sm text-center animate-slide-up">{error}</div>
+          <div className="px-5 py-4 rounded-2xl bg-accent-danger/10 border-2 border-accent-danger/20 text-accent-danger text-sm font-medium text-center animate-slide-up">
+            {error}
+          </div>
         ) : null}
       </div>
       <RulesModal />
