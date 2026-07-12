@@ -33,8 +33,9 @@ export default function RoomPage() {
   useEffect(() => {
     const socket = getSocket();
     function onGameUpdate(updated: ReturnType<typeof useGameStore.getState>["room"]) {
+      if (!updated) return;
       useGameStore.getState().setRoom(updated);
-      if (updated && updated.status === "playing") {
+      if (updated.status === "playing") {
         router.push(`/jogo/${params.id}`);
       }
     }

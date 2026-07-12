@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.mts",
-    "build": "next build",
+    "build": "next build --turbo",
     "start": "tsx server.mts",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.3.2",
-    "next": "^16.2.10",
+    "next": "15.5.20",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "socket.io": "^4.7.0",
@@ -31,7 +31,7 @@
     "postcss": "^8.5.17",
     "tailwindcss": "^4.3.2",
     "tsx": "^4.23.0",
-    "typescript": "7.0.2",
+    "typescript": "5.8.2",
     "vitest": "^4.1.10"
   }
 }

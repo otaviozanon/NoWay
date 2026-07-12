@@ -1,6 +1,10 @@
 import { Room, Player, RuleSet } from "./types";
 import { shuffleDeck } from "./deck";
 
+function generateId(): string {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
 function generateRoomCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "";
@@ -11,7 +15,7 @@ function generateRoomCode(): string {
 }
 
 export function createRoom(playerName: string, ruleSet: RuleSet): Room {
-  const playerId = crypto.randomUUID();
+    const playerId = generateId();
   const hostPlayer: Player = {
     id: playerId,
     name: playerName,
@@ -38,7 +42,7 @@ export function joinRoom(room: Room, playerName: string): Room {
   if (room.status !== "waiting") throw new Error("Nao e possivel entrar em uma partida em andamento");
   if (room.players.length >= 10) throw new Error("Sala cheia (maximo 10 jogadores)");
   const newPlayer: Player = {
-    id: crypto.randomUUID(),
+    id: generateId(),
     name: playerName,
     cards: [],
     dobreiCards: 0,
