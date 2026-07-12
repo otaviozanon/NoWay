@@ -1360,14 +1360,14 @@ export const cards: Card[] = [
     ],
   },
   {
-    id: 79, theme: "BOLHAS DE SABAO", patoPoints: 2,
+    id: 79, theme: "FOTOGRAFIA", patoPoints: 2,
     questions: [
-      { text: "Numero de pessoas dentro da maior bolha de sabao ja feita", answer: 181 },
-      { text: "Numero de bolhas estouradas por segundo no recorde mundial", answer: 300 },
-      { text: "Comprimento da maior bolha de sabao flutuante (metros)", answer: 40 },
-      { text: "Milimetros de espessura da parede de uma bolha de sabao", answer: 0.001 },
-      { text: "Numero de ingredientes na receita basica de bolha de sabao", answer: 3 },
-      { text: "Ano do primeiro campeonato mundial de bolhas de sabao", answer: 2005 },
+      { text: "Numero de megapixels do olho humano (aproximado)", answer: 576 },
+      { text: "Preco da camera mais cara ja vendida (milhoes de dolares)", answer: 2.8 },
+      { text: "Numero de fotos tiradas por ano no mundo (bilhoes)", answer: 1.8 },
+      { text: "Ano da primeira fotografia permanente", answer: 1826 },
+      { text: "Tempo de exposicao da primeira fotografia (horas)", answer: 8 },
+      { text: "Numero de lentes em um smartphone premium moderno", answer: 4 },
     ],
   },
   {
