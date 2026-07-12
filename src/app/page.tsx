@@ -55,7 +55,7 @@ export default function HomePage() {
 
         <div className="space-y-4">
           <input
-            className="w-full px-5 py-4 rounded-2xl bg-surface-raised border-2 border-white/5 text-text-primary
+            className="w-full px-5 py-4 rounded-2xl bg-surface-raised border-2 border-border text-text-primary
                        placeholder:text-text-muted/50 focus:outline-none focus:border-brand/40 focus:bg-surface-card
                        transition-all duration-300 text-lg font-medium touch-target"
             placeholder="Seu nome" value={name} onChange={(e) => setName(e.target.value)} maxLength={20}
@@ -64,13 +64,13 @@ export default function HomePage() {
           <div className="flex gap-2">
             <button onClick={() => setRuleSet("basic")}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl border-2 text-sm font-bold transition-all duration-300 touch-target ${
-                ruleSet === "basic" ? "border-brand/50 bg-brand/10 text-brand-light shadow-lg shadow-brand/10" : "border-white/5 bg-surface-raised text-text-muted hover:border-white/10"
+                ruleSet === "basic" ? "border-brand/50 bg-brand/10 text-brand-light shadow-lg shadow-brand/10" : "border-border bg-surface-raised text-text-muted hover:border-border"
               }`}>
               <Dice1 size={18} />Basico
             </button>
             <button onClick={() => setRuleSet("advanced")}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3.5 rounded-2xl border-2 text-sm font-bold transition-all duration-300 touch-target ${
-                ruleSet === "advanced" ? "border-brand/50 bg-brand/10 text-brand-light shadow-lg shadow-brand/10" : "border-white/5 bg-surface-raised text-text-muted hover:border-white/10"
+                ruleSet === "advanced" ? "border-brand/50 bg-brand/10 text-brand-light shadow-lg shadow-brand/10" : "border-border bg-surface-raised text-text-muted hover:border-border"
               }`}>
               <Dices size={18} />Avancado
             </button>
@@ -92,13 +92,13 @@ export default function HomePage() {
 
           <div className="flex gap-2">
             <input
-              className="flex-1 px-5 py-4 rounded-2xl bg-surface-raised border-2 border-white/5 text-text-primary
+              className="flex-1 px-5 py-4 rounded-2xl bg-surface-raised border-2 border-border text-text-primary
                          placeholder:text-text-muted/50 text-center text-lg font-mono font-bold tracking-[0.4em] uppercase
                          focus:outline-none focus:border-brand/40 transition-all duration-300 touch-target"
               placeholder="CODIGO" value={roomCode} onChange={(e) => setRoomCode(e.target.value)} maxLength={6}
             />
             <button onClick={handleJoin}
-              className="px-7 py-4 rounded-2xl bg-surface-raised hover:bg-surface-card border-2 border-white/5 hover:border-brand/30
+              className="px-7 py-4 rounded-2xl bg-surface-raised hover:bg-surface-card border-2 border-border hover:border-brand/30
                          text-text-primary font-bold text-lg transition-all duration-200 active:scale-[0.98] touch-target">
               <LogIn size={22} />
             </button>

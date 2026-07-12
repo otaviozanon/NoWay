@@ -46,7 +46,7 @@ export default function RoomPage() {
           <h1 className="text-2xl font-bold text-text-primary">Sala de Espera</h1>
         </div>
 
-        <div className="text-center p-6 rounded-xl bg-surface-raised border border-white/5">
+        <div className="text-center p-6 rounded-xl bg-surface-raised border border-border">
           <p className="text-text-muted text-sm mb-2">Codigo da sala</p>
           <button onClick={handleCopyCode} className="group flex items-center justify-center gap-3 mx-auto text-4xl font-mono font-bold text-brand-light hover:text-brand tracking-[0.3em] transition-all duration-200 touch-target">
             {room.id}<Copy size={20} />
@@ -61,7 +61,7 @@ export default function RoomPage() {
           </div>
           <div className="space-y-2">
             {room.players.map((p, i) => (
-              <div key={p.id} className="flex items-center gap-3 px-5 py-4 rounded-xl bg-surface-raised border border-white/5 animate-slide-up transition-all duration-200" style={{ animationDelay: `${i * 50}ms` }}>
+              <div key={p.id} className="flex items-center gap-3 px-5 py-4 rounded-xl bg-surface-raised border border-border animate-slide-up transition-all duration-200" style={{ animationDelay: `${i * 50}ms` }}>
                 <div className={`shrink-0 w-3 h-3 rounded-full transition-colors ${p.connected ? "bg-accent-success shadow-[0_0_6px_rgba(34,197,94,0.4)]" : "bg-accent-warning"}`} />
                 <span className="flex-1 text-text-primary font-medium truncate">{p.name}{p.id === myPlayerId ? <span className="text-text-muted ml-2 text-sm">(voce)</span> : null}</span>
                 {p.id === room.host ? <span className="flex items-center gap-1 text-accent-warning text-xs font-semibold"><Crown size={14} />HOST</span> : null}
@@ -72,7 +72,7 @@ export default function RoomPage() {
         </div>
 
         {isHost ? (
-          <button onClick={handleStart} disabled={!canStart} className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-semibold text-lg transition-all duration-200 touch-target ${canStart ? "bg-accent-success text-white hover:bg-accent-success/90 active:scale-[0.98] shadow-lg shadow-accent-success/25" : "bg-surface-raised text-text-muted cursor-not-allowed border border-white/5"}`}>
+          <button onClick={handleStart} disabled={!canStart} className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-semibold text-lg transition-all duration-200 touch-target ${canStart ? "bg-accent-success text-white hover:bg-accent-success/90 active:scale-[0.98] shadow-lg shadow-accent-success/25" : "bg-surface-raised text-text-muted cursor-not-allowed border border-border"}`}>
             <Play size={22} />{canStart ? "Iniciar Partida" : "Aguardando jogadores..."}
           </button>
         ) : (

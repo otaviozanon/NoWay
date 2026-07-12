@@ -43,7 +43,7 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
         {sorted.map((p, i) => {
           const isLoser = p.id === result.loser.id && !result.isTie;
           return (
-            <div key={p.id} className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 animate-slide-up ${isLoser ? "bg-accent-danger/5 border border-accent-danger/15" : "bg-surface-raised border border-white/5"}`} style={{ animationDelay: `${i * 80}ms` }}>
+            <div key={p.id} className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 animate-slide-up ${isLoser ? "bg-accent-danger/5 border border-accent-danger/15" : "bg-surface-raised border border-border"}`} style={{ animationDelay: `${i * 80}ms` }}>
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isLoser ? "bg-accent-danger/10" : "bg-accent-success/10"}`}>
                 {isLoser ? <XCircle size={20} className="text-accent-danger" /> : <CheckCircle2 size={20} className="text-accent-success" />}
               </div>
@@ -53,7 +53,7 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
               </div>
               <div className="flex items-center gap-1">
                 {p.cards.map((_, ci) => (
-                  <div key={ci} className={`w-5 h-7 rounded border ${isLoser ? "border-accent-danger/30 bg-accent-danger/10" : "border-white/5 bg-surface-card"}`} />
+                  <div key={ci} className={`w-5 h-7 rounded border ${isLoser ? "border-accent-danger/30 bg-accent-danger/10" : "border-border bg-surface-card"}`} />
                 ))}
               </div>
               <span className="text-text-muted font-mono text-sm tabular-nums w-12 text-right">{calculateScore(p, ruleSet)}</span>
@@ -62,13 +62,13 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
         })}
       </div>
 
-      <div className="p-4 rounded-xl bg-surface-card border border-white/5 space-y-3">
+      <div className="p-4 rounded-xl bg-surface-card border border-border space-y-3">
         <div className="flex items-center gap-2 text-sm text-text-secondary"><Users size={16} />Nova partida</div>
         <div className="flex flex-wrap gap-2">
           {players.map(p => {
             const voted = playAgainVotes.includes(p.id);
             return (
-              <span key={p.id} className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${voted ? "bg-accent-success/15 text-accent-success border border-accent-success/30" : "bg-surface-raised text-text-muted border border-white/5"}`}>
+              <span key={p.id} className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${voted ? "bg-accent-success/15 text-accent-success border border-accent-success/30" : "bg-surface-raised text-text-muted border border-border"}`}>
                 {p.name} {voted ? "✓" : ""}
               </span>
             );

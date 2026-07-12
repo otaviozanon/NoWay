@@ -75,7 +75,7 @@ export function setupSocket(io: SocketIOServer): void {
         if (room.ruleSet === "advanced" && qualifiesForDobrei(room, value)) {
           updated = addDobreiCard(updated, playerId);
           const player = updated.players.find(p => p.id === playerId);
-          updated = { ...updated, lastEvent: { type: "dobrei", message: `${player?.name} ganhou uma Carta Dobrei!`, playerId } };
+          updated = { ...updated, lastEvent: { type: "dobrei", message: `${player?.name} ganhou Dobrei!`, playerId } };
         }
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
@@ -153,7 +153,7 @@ export function setupSocket(io: SocketIOServer): void {
         const player = room.players.find(p => p.id === playerId);
         const updated = {
           ...endRound(room, "", card),
-          lastEvent: { type: "naMosca" as const, message: `${player?.name} acertou Na Mosca! Ninguem recebe carta.`, playerId },
+          lastEvent: { type: "naMosca" as const, message: `Na Mosca! Ninguem leva carta.`, playerId },
           playAgainVotes: [],
         };
         setRoom(room.id, updated);
@@ -168,7 +168,7 @@ export function setupSocket(io: SocketIOServer): void {
         updated = {
           ...updated,
           status: "finished" as const,
-          lastEvent: { type: "naMosca" as const, message: `${player?.name} errou Na Mosca! Recebeu TODAS as cartas!`, playerId },
+          lastEvent: { type: "naMosca" as const, message: `${player?.name} errou Na Mosca! Levou TODAS!`, playerId },
           playAgainVotes: [],
         };
         setRoom(room.id, updated);
@@ -250,16 +250,16 @@ function doResolve(room: Room, challengerId: string, challengedId: string, io: S
     const nextCard = updated.deck[updated.currentCardIndex];
     if (nextCard) updated = endRound(updated, loserId, nextCard);
   }
-  const loser = updated.players.find(p => p.id === loserId);
-  const totalCards = extraCards > 1 ? `${extraCards} cartas` : "1 carta";
-  updated = {
-    ...updated,
-    playAgainVotes: [],
-    lastEvent: {
-      type: "contest",
-      message: `${loser?.name || "Alguem"} recebeu ${totalCards}!`,
-      playerId: loserId,
-    }
+    const loser = updated.players.find(p => p.id === loserId);
+    const totalCards = extraCards > 1 ? `${extraCards} cartas` : "1 carta";
+    updated = {
+      ...updated,
+      playAgainVotes: [],
+      lastEvent: {
+        type: "contest",
+        message: `${loser?.name || "Alguem"} levou ${totalCards}!`,
+        playerId: loserId,
+      }
   };
   setRoom(room.id, updated);
   io.to(room.id).emit("room:state", updated);
