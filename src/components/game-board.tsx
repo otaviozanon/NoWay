@@ -19,7 +19,7 @@ function GameBoard() {
   const currentPlayer = room.players[room.currentPlayerIndex];
   const isMyTurn = currentPlayer?.id === myPlayerId;
   const questionIndex = 0;
-  const isChallengedInQuerApostar = room.activeContest?.challengedId === myPlayerId;
+  const isChallengedInQuerApostar = room.activeContest?.challengedId === myPlayerId && !room.activeContest?.querApostar;
   const hasActiveContest = !!room.activeContest && !room.activeContest.querApostar;
 
   return (

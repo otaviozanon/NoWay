@@ -104,6 +104,14 @@ export function setupSocket(io: SocketIOServer): void {
       }
     });
 
+    socket.on("game:contest:accept", () => {
+      const room = getRoomBySocketId(socket.id);
+      if (!room?.activeContest) return;
+      const playerId = getPlayerIdBySocketId(socket.id);
+      if (playerId !== room.activeContest.challengedId) return;
+      doResolve(room, room.activeContest.challengerId, room.activeContest.challengedId, io);
+    });
+
     socket.on("game:querApostar", () => {
       const room = getRoomBySocketId(socket.id);
       if (!room?.activeContest) return;
@@ -116,7 +124,7 @@ export function setupSocket(io: SocketIOServer): void {
 
     socket.on("game:querApostar:response", ({ keep }: { keep: boolean }) => {
       const room = getRoomBySocketId(socket.id);
-      if (!room?.activeContest) return;
+      if (!room?.activeContest?.querApostar) return;
       const playerId = getPlayerIdBySocketId(socket.id);
       if (playerId !== room.activeContest.challengerId) return;
       const { cardCount } = handleQuerApostar(room, keep);

@@ -20,9 +20,13 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
   }, [guessValue, minGuess]);
 
   const handleContest = useCallback(() => { getSocket().emit("game:contest"); }, []);
+  const handleAcceptContest = useCallback(() => { getSocket().emit("game:contest:accept"); }, []);
   const handleQuerApostar = useCallback(() => { getSocket().emit("game:querApostar"); }, []);
   const handleApostarResponse = useCallback((keep: boolean) => { getSocket().emit("game:querApostar:response", { keep }); }, []);
   const handleNaMosca = useCallback(() => { getSocket().emit("game:naMosca"); }, []);
+
+  const isChallenger = room.activeContest?.challengerId === myPlayerId;
+  const querApostarActive = room.activeContest?.querApostar === true;
 
   if (room.status === "finished") return null;
 
@@ -48,14 +52,28 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
       <div className="p-5 rounded-xl bg-surface-raised border border-accent-warning/30 space-y-4 animate-scale-in">
         <div className="flex items-center gap-3"><AlertTriangle size={24} className="text-accent-warning" /><p className="text-accent-warning font-semibold text-lg">Seu palpite foi contestado!</p></div>
         <div className="flex gap-3">
-          <button onClick={() => handleApostarResponse(false)} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl bg-surface-card border border-white/10 hover:bg-surface-card/80 active:scale-[0.98] text-text-primary font-semibold transition-all duration-200 touch-target"><Hand size={20} />Aceitar</button>
+          <button onClick={handleAcceptContest} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl bg-surface-card border border-white/10 hover:bg-surface-card/80 active:scale-[0.98] text-text-primary font-semibold transition-all duration-200 touch-target"><Hand size={20} />Aceitar</button>
           <button onClick={handleQuerApostar} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl bg-accent-warning hover:bg-accent-warning/90 active:scale-[0.98] text-black font-bold text-lg transition-all duration-200 touch-target shadow-lg shadow-accent-warning/25"><Swords size={20} />Quer Apostar?</button>
         </div>
       </div>
     );
   }
 
-  if (hasActiveContest && !isMyTurn) return <p className="text-center text-text-muted py-4 animate-pulse">Aguardando resposta da aposta...</p>;
+  if (isChallenger && querApostarActive) {
+    return (
+      <div className="p-5 rounded-xl bg-surface-raised border border-accent-warning/30 space-y-4 animate-scale-in">
+        <div className="flex items-center gap-3"><AlertTriangle size={24} className="text-accent-warning" /><p className="text-accent-warning font-semibold text-lg">Ele quer apostar! Mantem a contestacao?</p></div>
+        <div className="flex gap-3">
+          <button onClick={() => handleApostarResponse(false)} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl bg-surface-card border border-white/10 hover:bg-surface-card/80 active:scale-[0.98] text-text-primary font-semibold transition-all duration-200 touch-target"><Hand size={20} />Desistir</button>
+          <button onClick={() => handleApostarResponse(true)} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl bg-accent-warning hover:bg-accent-warning/90 active:scale-[0.98] text-black font-bold text-lg transition-all duration-200 touch-target shadow-lg shadow-accent-warning/25"><Swords size={20} />Manter Aposta</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (hasActiveContest && !isMyTurn && !isChallenger) {
+    return <p className="text-center text-text-muted py-4 animate-pulse">Aguardando o jogador decidir...</p>;
+  }
 
   return <p className="text-center text-text-muted py-6 text-lg">Aguardando o turno de outro jogador...</p>;
 }

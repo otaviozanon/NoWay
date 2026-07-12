@@ -6,9 +6,13 @@ describe("Card data validation", () => {
     expect(cards).toHaveLength(80);
   });
 
-  it("each card should have 6 questions", () => {
+  it("cards 1-50 should have 16 questions, cards 51-80 should have 6", () => {
     for (const card of cards) {
-      expect(card.questions, `Card ${card.id}: ${card.theme}`).toHaveLength(6);
+      if (card.id <= 50) {
+        expect(card.questions, `Card ${card.id}: ${card.theme}`).toHaveLength(16);
+      } else {
+        expect(card.questions, `Card ${card.id}: ${card.theme}`).toHaveLength(6);
+      }
     }
   });
 
@@ -41,8 +45,8 @@ describe("Card data validation", () => {
     }
   });
 
-  it("should have 480 questions total", () => {
+  it("should have 980 questions total (50x16 + 30x6)", () => {
     const total = cards.reduce((sum, c) => sum + c.questions.length, 0);
-    expect(total).toBe(480);
+    expect(total).toBe(980);
   });
 });
