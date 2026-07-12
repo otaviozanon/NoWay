@@ -38,7 +38,7 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
           <button onClick={handleGuess} className="flex items-center gap-2 px-8 py-5 rounded-xl bg-brand hover:bg-brand/90 active:scale-[0.97] text-black font-bold text-lg transition-all duration-200 touch-target shadow-lg shadow-brand/25"><Send size={20} />Palpite</button>
         </div>
         {lastGuess && lastGuess.playerId !== myPlayerId ? (
-          <button onClick={handleContest} className="w-full flex items-center justify-center gap-2 p-5 rounded-xl bg-gradient-to-r from-accent-danger/90 to-accent-danger hover:from-accent-danger hover:to-accent-danger/90 active:scale-[0.98] text-white font-bold text-xl transition-all duration-200 touch-target shadow-lg shadow-accent-danger/25"><Swords size={24} />Nem a Pato!</button>
+          <button onClick={handleContest} className="w-full flex items-center justify-center gap-2 p-5 rounded-xl bg-gradient-to-r from-accent-danger/90 to-accent-danger hover:from-accent-danger hover:to-accent-danger/90 active:scale-[0.98] text-white font-bold text-xl transition-all duration-200 touch-target shadow-lg shadow-accent-danger/25"><Swords size={24} />Nem Ferrando!</button>
         ) : null}
         {lastGuess && room.ruleSet === "advanced" ? (
           <button onClick={handleNaMosca} className="w-full flex items-center justify-center gap-2 p-4 rounded-xl bg-surface-raised border border-accent-warning/30 hover:bg-accent-warning/10 hover:border-accent-warning/50 active:scale-[0.98] text-accent-warning font-semibold text-lg transition-all duration-200 touch-target"><Zap size={20} />Na Mosca!</button>

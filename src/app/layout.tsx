@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Nem a Pato!",
+  title: "NoWay - Nem Ferrando!",
   description: "Jogo de blefe e curiosidades",
 };
 

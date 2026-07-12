@@ -51,8 +51,8 @@ export default function HomePage() {
               <path d="M20 20c0 2 2 3 4 3s4-1 4-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-text-primary">Nem a Pato!</h1>
-          <p className="text-text-secondary text-lg">Jogo de blefe e curiosidades</p>
+          <h1 className="text-4xl font-bold tracking-tight text-text-primary">NoWay</h1>
+          <p className="text-text-secondary text-lg">Nem Ferrando!</p>
         </div>
 
         <div className="space-y-4">

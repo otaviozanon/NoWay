@@ -47,12 +47,12 @@ export default function RulesModal() {
               <ol className="list-decimal pl-5 space-y-2">
                 <li>O sistema embaralha as cartas automaticamente e sorteia uma pergunta.</li>
                 <li>O jogador da vez da um <strong>palpite numerico</strong>.</li>
-                <li>O proximo jogador escolhe: <strong>dar um palpite maior</strong> ou clicar em <strong>Nem a Pato!</strong> para contestar.</li>
+                <li>O proximo jogador escolhe: <strong>dar um palpite maior</strong> ou clicar em <strong>NoWay!</strong> para contestar.</li>
                 <li>Os palpites continuam ate alguem contestar.</li>
               </ol>
             </Section>
 
-            <Section title="Nem a Pato! (Contestacao)">
+            <Section title="NoWay! (Contestacao)">
               <p>Ao contestar, a resposta correta e revelada:</p>
               <div className="grid grid-cols-2 gap-3 mt-2">
                 <div className="p-3 rounded-lg bg-accent-danger/10 border border-accent-danger/20 text-sm">
