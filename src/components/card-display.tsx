@@ -3,6 +3,7 @@
 import { memo } from "react";
 import { Card } from "@/game-engine/types";
 import { Sparkles } from "lucide-react";
+import { DuckIconSmall } from "./duck-icon";
 
 const catColor: Record<string, string> = {
   "ESPORTES RADICAIS": "border-l-red-500/20",
@@ -50,7 +51,11 @@ function CardDisplay({ card, questionIndex, round }: Props) {
           <p className="text-2xl text-text-primary leading-snug font-bold text-balance">{card.questions[questionIndex].text}</p>
           <div className="flex items-center justify-between">
             <span className="text-xs text-text-muted">Pergunta {questionIndex + 1}</span>
-            <span className="text-xs text-text-muted">{card.patoPoints} Ponto{card.patoPoints > 1 ? "s" : ""} de Pato</span>
+            <div className="flex items-center gap-1.5 text-accent-warning">
+              {Array.from({ length: card.patoPoints }).map((_, i) => (
+                <DuckIconSmall key={i} size={16} />
+              ))}
+            </div>
           </div>
           <div className="w-full h-1 rounded-full bg-surface-raised overflow-hidden">
             <div className="h-full rounded-full bg-gradient-to-r from-brand to-brand-light transition-all duration-700 ease-out"

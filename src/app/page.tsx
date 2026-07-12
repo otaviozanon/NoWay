@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { connectSocket, getSocket } from "@/lib/socket";
 import { setupSocketListeners, useGameStore } from "@/lib/store";
 import { Room } from "@/game-engine/types";
-import { Users, LogIn, ArrowRight, Dice1, Dices, Sparkles } from "lucide-react";
+import { Users, LogIn, ArrowRight, Dice1, Dices } from "lucide-react";
 import RulesModal from "@/components/rules-modal";
+import { DuckIcon } from "@/components/duck-icon";
 
 export default function HomePage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function HomePage() {
         <div className="text-center space-y-4">
           <div className="relative inline-block">
             <div className="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-brand/20 to-brand/5 border border-brand/20 flex items-center justify-center animate-float shadow-xl shadow-brand/10">
-              <Sparkles size={40} className="text-brand-light" />
+              <DuckIcon size={44} className="text-brand-light" />
             </div>
           </div>
           <div>
