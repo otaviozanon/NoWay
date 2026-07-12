@@ -193,27 +193,25 @@ export function setupSocket(io: SocketIOServer): void {
         const names = room.players.map((p) => p.name);
         const roomId = room.id;
         deleteRoom(roomId);
-        const newRoom = createRoom(names[0], room.ruleSet);
+        let newRoom = createRoom(names[0], room.ruleSet);
         newRoom.id = roomId;
-        newRoom.status = "playing";
-        const started = startGame(joinRoom(newRoom, names[1]));
-        started.id = roomId;
-        for (const name of names.slice(2)) {
+        setRoom(roomId, newRoom);
+        for (const name of names.slice(1)) {
           try {
             const current = getRoom(roomId);
             if (current) {
               const updated = joinRoom(current, name);
               updated.id = roomId;
-              updated.status = "playing";
               setRoom(roomId, updated);
             }
           } catch {}
         }
         const finalRoom = getRoom(roomId);
         if (finalRoom) {
-          setRoom(roomId, { ...finalRoom, status: "playing", ...startGame(finalRoom), playAgainVotes: [] });
-          const ready = getRoom(roomId);
-          if (ready) io.to(roomId).emit("room:state", ready);
+          const started = startGame(finalRoom);
+          started.id = roomId;
+          setRoom(roomId, started);
+          io.to(roomId).emit("room:state", started);
         }
       }
     });
