@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": { "node": ">=18" },
   "scripts": {
     "dev": "tsx server.mts",
     "build": "next build --turbo",
-    "start": "tsx server.mts",
+    "start": "NODE_ENV=production tsx server.mts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "next lint"
