@@ -37,9 +37,11 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
   const hResp = useCallback((k: boolean) => getSocket().emit("game:querApostar:response", { keep: k }), []);
   const hMosca = useCallback(() => getSocket().emit("game:naMosca"), []);
 
+  const querApostarActive = room.activeContest?.querApostar === true;
+
   if (room.status === "finished") return null;
 
-  if (isMyTurn && !hasActiveContest) {
+  if (isMyTurn && !hasActiveContest && !querApostarActive) {
     return (
       <div className="space-y-3 animate-slide-up">
         <div className="flex gap-2">

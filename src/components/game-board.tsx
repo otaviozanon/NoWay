@@ -5,16 +5,21 @@ import { useGameStore } from "@/lib/store";
 import CardDisplay from "./card-display";
 import GuessSection from "./guess-section";
 import GameResultDisplay from "./game-result";
-import { MessageCircle, Users, X, Zap, Swords, Sparkles, ShieldAlert } from "lucide-react";
+import { MessageCircle, Users, X, Zap, Swords, Sparkles, ShieldAlert, Clock } from "lucide-react";
 
 function GameBoard() {
   const { room, myPlayerId, gameResult } = useGameStore();
   const [toast, setToast] = useState<{ message: string; type: string } | null>(null);
+  const [showResult, setShowResult] = useState(false);
 
   useEffect(() => {
     if (room?.lastEvent) {
       setToast({ message: room.lastEvent.message, type: room.lastEvent.type });
-      setTimeout(() => setToast(null), 3000);
+      setShowResult(true);
+      setTimeout(() => {
+        setToast(null);
+        setShowResult(false);
+      }, 5000);
     }
   }, [room?.lastEvent]);
 
@@ -40,8 +45,16 @@ function GameBoard() {
   return (
     <div className="max-w-lg mx-auto space-y-5">
       {toast ? <MiniToast message={toast.message} type={toast.type} onClose={() => setToast(null)} /> : null}
+
       <CardDisplay card={card} questionIndex={0} round={room.currentRound} />
 
+      {showResult ? (
+        <div className="text-center py-6 animate-scale-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-danger/10 border border-accent-danger/20 text-accent-danger text-sm font-bold">
+            <Clock size={14} className="animate-pulse" />Proxima carta em instantes...
+          </div>
+        </div>
+      ) : null}
       {room.guesses.length > 0 ? (
         <div className="space-y-1 animate-fade-in">
           <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest flex items-center gap-1.5"><MessageCircle size={11} />Palpites</span>
