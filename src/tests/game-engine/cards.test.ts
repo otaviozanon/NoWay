@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { cards } from "@/cards/data";
 
 describe("Card data validation", () => {
-  it("should have exactly 50 cards", () => {
-    expect(cards).toHaveLength(50);
+  it("should have exactly 80 cards", () => {
+    expect(cards).toHaveLength(80);
   });
 
   it("each card should have 6 questions", () => {
@@ -31,7 +31,7 @@ describe("Card data validation", () => {
 
   it("should have unique card IDs", () => {
     const ids = cards.map((c) => c.id);
-    expect(new Set(ids).size).toBe(50);
+    expect(new Set(ids).size).toBe(80);
   });
 
   it("each card should have a theme name", () => {
@@ -41,8 +41,8 @@ describe("Card data validation", () => {
     }
   });
 
-  it("should have 300 questions total", () => {
+  it("should have 480 questions total", () => {
     const total = cards.reduce((sum, c) => sum + c.questions.length, 0);
-    expect(total).toBe(300);
+    expect(total).toBe(480);
   });
 });
