@@ -5,7 +5,20 @@ import { useRouter } from "next/navigation";
 import { connectSocket, getSocket } from "@/lib/socket";
 import { setupSocketListeners, useGameStore } from "@/lib/store";
 import { Room } from "@/game-engine/types";
-import { Users, LogIn, ArrowRight, Dice1, Dice2 } from "lucide-react";
+
+function Icon({ d, size = 20 }: { d: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d={d} />
+    </svg>
+  );
+}
+
+const UsersIcon = "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 M22 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75 M8 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8z";
+const LogInIcon = "M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4 M10 17l5-5-5-5 M13.8 12H3";
+const ArrowRightIcon = "M5 12h14 M12 5l7 7-7 7";
+const Dice1Icon = "M12 12h.01 M7.5 4.5l9 9 M4.5 7.5l9-9 M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5z";
+const Dice2Icon = "M10 18h4 M18 12h.01 M15 9l3 3-3 3 M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5z";
 
 export default function HomePage() {
   const router = useRouter();
@@ -45,32 +58,27 @@ export default function HomePage() {
         <div className="text-center space-y-3">
           <div className="w-20 h-20 mx-auto rounded-2xl bg-brand-glow flex items-center justify-center">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-brand-light">
-              <path d="M24 6C18 6 12 14 12 22c0 6 4 12 12 16 8-4 12-10 12-16 0-8-6-16-12-16z" stroke="currentColor" strokeWidth="2" fill="none" />
-              <path d="M20 28c0-2 1-4 4-4s4 2 4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <circle cx="18" cy="22" r="2" fill="currentColor" />
-              <circle cx="30" cy="22" r="2" fill="currentColor" />
+              <ellipse cx="24" cy="30" rx="18" ry="12" stroke="currentColor" strokeWidth="2" />
+              <circle cx="24" cy="16" r="8" stroke="currentColor" strokeWidth="2" />
+              <circle cx="20" cy="15" r="1.5" fill="currentColor" />
+              <circle cx="28" cy="15" r="1.5" fill="currentColor" />
+              <path d="M20 20c0 2 2 3 4 3s4-1 4-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-text-primary">
-            Nem a Pato!
-          </h1>
-          <p className="text-text-secondary text-lg">
-            Jogo de blefe e curiosidades
-          </p>
+          <h1 className="text-4xl font-bold tracking-tight text-text-primary">Nem a Pato!</h1>
+          <p className="text-text-secondary text-lg">Jogo de blefe e curiosidades</p>
         </div>
 
         <div className="space-y-4">
-          <div>
-            <input
-              className="w-full px-5 py-4 rounded-xl bg-surface-raised border border-white/10 text-text-primary placeholder:text-text-muted
-                         focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent
-                         transition-all duration-200 text-lg touch-target"
-              placeholder="Seu nome"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              maxLength={20}
-            />
-          </div>
+          <input
+            className="w-full px-5 py-4 rounded-xl bg-surface-raised border border-white/10 text-text-primary placeholder:text-text-muted
+                       focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent
+                       transition-all duration-200 text-lg touch-target"
+            placeholder="Seu nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={20}
+          />
 
           <div className="flex gap-3">
             <button
@@ -78,11 +86,11 @@ export default function HomePage() {
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium
                          transition-all duration-200 touch-target
                          ${ruleSet === "basic"
-                           ? "border-brand bg-brand/10 text-brand-light shadow-[0_0_12px_rgba(124,58,237,0.15)]"
+                           ? "border-brand bg-brand/10 text-brand-light shadow-[0_0_12px_rgba(249,115,22,0.15)]"
                            : "border-white/5 bg-surface-raised text-text-secondary hover:border-white/10 hover:text-text-primary"
                          }`}
             >
-              <Dice1 size={18} />
+              <Icon d={Dice1Icon} size={18} />
               Regras Basicas
             </button>
             <button
@@ -90,11 +98,11 @@ export default function HomePage() {
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium
                          transition-all duration-200 touch-target
                          ${ruleSet === "advanced"
-                           ? "border-brand bg-brand/10 text-brand-light shadow-[0_0_12px_rgba(124,58,237,0.15)]"
+                           ? "border-brand bg-brand/10 text-brand-light shadow-[0_0_12px_rgba(249,115,22,0.15)]"
                            : "border-white/5 bg-surface-raised text-text-secondary hover:border-white/10 hover:text-text-primary"
                          }`}
             >
-              <Dice2 size={18} />
+              <Icon d={Dice2Icon} size={18} />
               Regras Avancadas
             </button>
           </div>
@@ -103,13 +111,13 @@ export default function HomePage() {
             onClick={handleCreate}
             className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl
                        bg-brand hover:bg-brand/90 active:scale-[0.98]
-                       text-white font-semibold text-lg
+                       text-black font-semibold text-lg
                        transition-all duration-200 touch-target
                        shadow-lg shadow-brand/25"
           >
-            <Users size={22} />
+            <Icon d={UsersIcon} size={22} />
             Criar Sala
-            <ArrowRight size={18} />
+            <Icon d={ArrowRightIcon} size={18} />
           </button>
 
           <div className="flex items-center gap-3">
@@ -136,7 +144,7 @@ export default function HomePage() {
                          text-text-primary font-semibold text-lg
                          transition-all duration-200 active:scale-[0.98] touch-target"
             >
-              <LogIn size={22} />
+              <Icon d={LogInIcon} size={22} />
             </button>
           </div>
         </div>
