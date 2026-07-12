@@ -1,0 +1,27 @@
+{
+  "name": "nem-a-pato",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx server.ts",
+    "build": "next build",
+    "start": "tsx server.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "next lint"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@vitejs/plugin-react": "^6.0.3",
+    "autoprefixer": "^10.5.2",
+    "jsdom": "^29.1.1",
+    "postcss": "^8.5.17",
+    "tailwindcss": "^4.3.2",
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}
