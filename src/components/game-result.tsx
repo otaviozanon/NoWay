@@ -1,11 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useCallback, memo } from "react";
 import { GameResult } from "@/game-engine/types";
 import { calculateScore } from "@/game-engine/scoring";
 import { getSocket } from "@/lib/socket";
-import { useCallback } from "react";
-import { memo } from "react";
+import { Trophy, RotateCcw, Camera, CheckCircle2, XCircle } from "lucide-react";
 
 interface Props {
   result: GameResult;
@@ -23,46 +22,77 @@ function GameResultDisplay({ result, ruleSet }: Props) {
   }, []);
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold mb-2">Fim de Jogo!</h2>
-        <p className="text-gray-400">O grande perdedor e...</p>
+    <div className="space-y-8 animate-scale-in">
+      <div className="text-center space-y-3">
+        <div className="w-16 h-16 mx-auto rounded-2xl bg-brand-glow flex items-center justify-center">
+          <Trophy size={32} className="text-brand-light" />
+        </div>
+        <h2 className="text-3xl font-bold text-text-primary">Fim de Jogo!</h2>
+        <p className="text-text-secondary text-lg">O grande perdedor e...</p>
       </div>
 
-      <div className="text-center p-6 rounded-xl bg-red-900/30 border border-red-700">
-        <div className="text-6xl mb-3">🦆</div>
-        <div className="text-2xl font-bold text-red-400">
-          {result.isTie ? "Empate! Multiplos patos!" : result.loser.name}
+      <div className="text-center p-8 rounded-2xl bg-surface-raised border border-accent-danger/20
+                      shadow-lg shadow-accent-danger/5">
+        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-accent-danger/10
+                        flex items-center justify-center">
+          <XCircle size={40} className="text-accent-danger" />
         </div>
+        <div className="text-2xl font-bold text-accent-danger">
+          {result.isTie ? "Empate!" : result.loser.name}
+        </div>
+        {result.isTie ? (
+          <p className="text-text-muted mt-2">Multiplos patos da mesa!</p>
+        ) : null}
       </div>
 
       <div className="space-y-2">
-        {sorted.map((p) => (
-          <div
-            key={p.id}
-            className={`flex items-center justify-between p-3 rounded-lg ${
-              p.id === result.loser.id && !result.isTie ? "bg-red-900/20 border border-red-800" : "bg-gray-800"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-lg">{p.id === result.loser.id && !result.isTie ? "❌" : "✅"}</span>
-              <span className={p.id === result.loser.id && !result.isTie ? "text-red-300" : ""}>{p.name}</span>
+        {sorted.map((p, i) => {
+          const isLoser = p.id === result.loser.id && !result.isTie;
+          return (
+            <div
+              key={p.id}
+              className={`flex items-center justify-between px-5 py-4 rounded-xl
+                         transition-all duration-200 animate-slide-up
+                         ${isLoser
+                           ? "bg-accent-danger/5 border border-accent-danger/20"
+                           : "bg-surface-raised border border-white/5"
+                         }`}
+              style={{ animationDelay: `${i * 60}ms` }}
+            >
+              <div className="flex items-center gap-3">
+                {isLoser ? (
+                  <XCircle size={22} className="text-accent-danger shrink-0" />
+                ) : (
+                  <CheckCircle2 size={22} className="text-accent-success shrink-0" />
+                )}
+                <span className={`font-medium ${isLoser ? "text-accent-danger" : "text-text-primary"}`}>
+                  {p.name}
+                </span>
+              </div>
+              <span className="text-text-muted font-mono text-sm tabular-nums">
+                {calculateScore(p, ruleSet)} {ruleSet === "advanced" ? "pts" : "cartas"}
+              </span>
             </div>
-            <span className="text-gray-400">
-              {calculateScore(p, ruleSet)} {ruleSet === "advanced" ? "pts" : "cartas"}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      <p className="text-center text-yellow-400 text-sm bg-gray-800 p-3 rounded-lg">
-        Tire uma foto do Pato da Mesa! #patodamesa
-      </p>
+      <div className="flex items-center gap-3 px-5 py-4 rounded-xl bg-surface-raised border border-accent-warning/10">
+        <Camera size={20} className="text-accent-warning shrink-0" />
+        <p className="text-accent-warning text-sm">
+          Tire uma foto do Pato da Mesa! <span className="font-mono text-xs">#patodamesa</span>
+        </p>
+      </div>
 
       <button
         onClick={handlePlayAgain}
-        className="w-full p-4 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-lg transition"
+        className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-xl
+                   bg-brand hover:bg-brand/90 active:scale-[0.98]
+                   text-white font-semibold text-lg
+                   transition-all duration-200 touch-target
+                   shadow-lg shadow-brand/25"
       >
+        <RotateCcw size={22} />
         Nova Partida
       </button>
     </div>

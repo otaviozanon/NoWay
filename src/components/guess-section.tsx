@@ -3,6 +3,7 @@
 import { useState, useCallback, memo } from "react";
 import { getSocket } from "@/lib/socket";
 import { Room } from "@/game-engine/types";
+import { Send, Swords, Zap, AlertTriangle, Hand } from "lucide-react";
 
 interface Props {
   room: Room;
@@ -33,29 +34,62 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
 
   if (isMyTurn && !hasActiveContest) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 animate-slide-up">
         <div className="flex gap-3">
           <input
             type="number"
             min={minGuess}
-            className="flex-1 p-4 rounded-lg bg-gray-800 border border-gray-700 text-white text-xl font-mono"
-            placeholder={`Maior que ${minGuess - 1}`}
+            className="flex-1 p-5 rounded-xl bg-surface-raised border border-white/10
+                       text-white text-2xl font-mono font-bold
+                       placeholder:text-text-muted
+                       focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent
+                       transition-all duration-200 touch-target"
+            placeholder={`> ${minGuess - 1}`}
             value={guessValue}
             onChange={(e) => setGuessValue(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" ? handleGuess() : null}
             autoFocus
           />
-          <button onClick={handleGuess} className="px-8 py-4 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-lg transition">
+          <button
+            onClick={handleGuess}
+            className="flex items-center gap-2 px-8 py-5 rounded-xl
+                       bg-brand hover:bg-brand/90 active:scale-[0.97]
+                       text-white font-bold text-lg
+                       transition-all duration-200 touch-target
+                       shadow-lg shadow-brand/25"
+          >
+            <Send size={20} />
             Palpite
           </button>
         </div>
+
         {lastGuess && lastGuess.playerId !== myPlayerId ? (
-          <button onClick={handleContest} className="w-full p-4 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-xl transition">
+          <button
+            onClick={handleContest}
+            className="w-full flex items-center justify-center gap-2 p-5 rounded-xl
+                       bg-gradient-to-r from-accent-danger/90 to-accent-danger
+                       hover:from-accent-danger hover:to-accent-danger/90
+                       active:scale-[0.98]
+                       text-white font-bold text-xl
+                       transition-all duration-200 touch-target
+                       shadow-lg shadow-accent-danger/25"
+          >
+            <Swords size={24} />
             Nem a Pato!
           </button>
         ) : null}
+
         {lastGuess && room.ruleSet === "advanced" ? (
-          <button onClick={handleNaMosca} className="w-full p-3 rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white font-semibold transition">
+          <button
+            onClick={handleNaMosca}
+            className="w-full flex items-center justify-center gap-2 p-4 rounded-xl
+                       bg-surface-raised border border-accent-warning/30
+                       hover:bg-accent-warning/10 hover:border-accent-warning/50
+                       active:scale-[0.98]
+                       text-accent-warning font-semibold text-lg
+                       transition-all duration-200 touch-target"
+          >
+            <Zap size={20} />
             Na Mosca!
           </button>
         ) : null}
@@ -65,13 +99,33 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
 
   if (isChallengedInQuerApostar) {
     return (
-      <div className="p-4 rounded-lg bg-orange-900/50 border border-orange-700 space-y-3">
-        <p className="text-orange-300 font-semibold text-lg">Seu palpite foi contestado!</p>
+      <div className="p-5 rounded-xl bg-surface-raised border border-accent-warning/30
+                      space-y-4 animate-scale-in">
+        <div className="flex items-center gap-3">
+          <AlertTriangle size={24} className="text-accent-warning shrink-0" />
+          <p className="text-accent-warning font-semibold text-lg">Seu palpite foi contestado!</p>
+        </div>
         <div className="flex gap-3">
-          <button onClick={() => handleApostarResponse(false)} className="flex-1 p-4 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-semibold transition">
+          <button
+            onClick={() => handleApostarResponse(false)}
+            className="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl
+                       bg-surface-card border border-white/10
+                       hover:bg-surface-card/80 active:scale-[0.98]
+                       text-text-primary font-semibold
+                       transition-all duration-200 touch-target"
+          >
+            <Hand size={20} />
             Aceitar
           </button>
-          <button onClick={handleQuerApostar} className="flex-1 p-4 rounded-lg bg-orange-600 hover:bg-orange-500 text-white font-bold text-lg transition">
+          <button
+            onClick={handleQuerApostar}
+            className="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl
+                       bg-accent-warning hover:bg-accent-warning/90 active:scale-[0.98]
+                       text-surface font-bold text-lg
+                       transition-all duration-200 touch-target
+                       shadow-lg shadow-accent-warning/25"
+          >
+            <Swords size={20} />
             Quer Apostar?
           </button>
         </div>
@@ -80,11 +134,15 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
   }
 
   if (hasActiveContest && !isMyTurn) {
-    return <p className="text-center text-gray-400 py-4">Aguardando resposta da aposta...</p>;
+    return (
+      <p className="text-center text-text-muted py-4 animate-pulse">
+        Aguardando resposta da aposta...
+      </p>
+    );
   }
 
   return (
-    <p className="text-center text-gray-400 py-4">
+    <p className="text-center text-text-muted py-6 text-lg">
       Aguardando o turno de outro jogador...
     </p>
   );

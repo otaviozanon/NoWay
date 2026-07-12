@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { connectSocket, getSocket } from "@/lib/socket";
 import { setupSocketListeners, useGameStore } from "@/lib/store";
 import { Room } from "@/game-engine/types";
+import { Users, LogIn, ArrowRight, Dice1, Dice2 } from "lucide-react";
 
 export default function HomePage() {
   const router = useRouter();
@@ -39,71 +40,110 @@ export default function HomePage() {
   }, [name, roomCode, setError]);
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">
-        <div className="text-center">
-          <h1 className="text-5xl font-bold mb-2">🦆</h1>
-          <h1 className="text-4xl font-bold">Nem a Pato!</h1>
-          <p className="text-gray-400 mt-2">Jogo de blefe e curiosidades</p>
+    <main className="min-h-dvh flex items-center justify-center p-4 bg-surface">
+      <div className="w-full max-w-md space-y-8 animate-fade-in">
+        <div className="text-center space-y-3">
+          <div className="w-20 h-20 mx-auto rounded-2xl bg-brand-glow flex items-center justify-center">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="text-brand-light">
+              <path d="M24 6C18 6 12 14 12 22c0 6 4 12 12 16 8-4 12-10 12-16 0-8-6-16-12-16z" stroke="currentColor" strokeWidth="2" fill="none" />
+              <path d="M20 28c0-2 1-4 4-4s4 2 4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <circle cx="18" cy="22" r="2" fill="currentColor" />
+              <circle cx="30" cy="22" r="2" fill="currentColor" />
+            </svg>
+          </div>
+          <h1 className="text-4xl font-bold tracking-tight text-text-primary">
+            Nem a Pato!
+          </h1>
+          <p className="text-text-secondary text-lg">
+            Jogo de blefe e curiosidades
+          </p>
         </div>
 
-        <input
-          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500"
-          placeholder="Seu nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          maxLength={20}
-        />
+        <div className="space-y-4">
+          <div>
+            <input
+              className="w-full px-5 py-4 rounded-xl bg-surface-raised border border-white/10 text-text-primary placeholder:text-text-muted
+                         focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent
+                         transition-all duration-200 text-lg touch-target"
+              placeholder="Seu nome"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              maxLength={20}
+            />
+          </div>
 
-        <div className="flex gap-2">
+          <div className="flex gap-3">
+            <button
+              onClick={() => setRuleSet("basic")}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium
+                         transition-all duration-200 touch-target
+                         ${ruleSet === "basic"
+                           ? "border-brand bg-brand/10 text-brand-light shadow-[0_0_12px_rgba(124,58,237,0.15)]"
+                           : "border-white/5 bg-surface-raised text-text-secondary hover:border-white/10 hover:text-text-primary"
+                         }`}
+            >
+              <Dice1 size={18} />
+              Regras Basicas
+            </button>
+            <button
+              onClick={() => setRuleSet("advanced")}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium
+                         transition-all duration-200 touch-target
+                         ${ruleSet === "advanced"
+                           ? "border-brand bg-brand/10 text-brand-light shadow-[0_0_12px_rgba(124,58,237,0.15)]"
+                           : "border-white/5 bg-surface-raised text-text-secondary hover:border-white/10 hover:text-text-primary"
+                         }`}
+            >
+              <Dice2 size={18} />
+              Regras Avancadas
+            </button>
+          </div>
+
           <button
-            onClick={() => setRuleSet("basic")}
-            className={`flex-1 p-2 rounded-lg border text-sm font-medium transition ${
-              ruleSet === "basic" ? "border-purple-500 bg-purple-500/20 text-purple-300" : "border-gray-700 text-gray-400 hover:border-gray-600"
-            }`}
+            onClick={handleCreate}
+            className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl
+                       bg-brand hover:bg-brand/90 active:scale-[0.98]
+                       text-white font-semibold text-lg
+                       transition-all duration-200 touch-target
+                       shadow-lg shadow-brand/25"
           >
-            Regras Basicas
+            <Users size={22} />
+            Criar Sala
+            <ArrowRight size={18} />
           </button>
-          <button
-            onClick={() => setRuleSet("advanced")}
-            className={`flex-1 p-2 rounded-lg border text-sm font-medium transition ${
-              ruleSet === "advanced" ? "border-purple-500 bg-purple-500/20 text-purple-300" : "border-gray-700 text-gray-400 hover:border-gray-600"
-            }`}
-          >
-            Regras Avancadas
-          </button>
+
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-white/5" />
+            <span className="text-text-muted text-sm">ou entre em uma sala</span>
+            <div className="flex-1 h-px bg-white/5" />
+          </div>
+
+          <div className="flex gap-3">
+            <input
+              className="flex-1 px-5 py-4 rounded-xl bg-surface-raised border border-white/10 text-text-primary
+                         placeholder:text-text-muted text-center text-lg font-mono tracking-[0.3em] uppercase
+                         focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent
+                         transition-all duration-200 touch-target"
+              placeholder="CODIGO"
+              value={roomCode}
+              onChange={(e) => setRoomCode(e.target.value)}
+              maxLength={6}
+            />
+            <button
+              onClick={handleJoin}
+              className="px-6 py-4 rounded-xl bg-surface-raised hover:bg-surface-card
+                         border border-white/10 hover:border-brand/30
+                         text-text-primary font-semibold text-lg
+                         transition-all duration-200 active:scale-[0.98] touch-target"
+            >
+              <LogIn size={22} />
+            </button>
+          </div>
         </div>
-
-        <button
-          onClick={handleCreate}
-          className="w-full p-4 rounded-lg bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white font-semibold text-lg transition"
-        >
-          Criar Sala
-        </button>
-
-        <div className="flex items-center gap-2">
-          <div className="flex-1 border-t border-gray-700" />
-          <span className="text-gray-500 text-sm">ou entre em uma sala</span>
-          <div className="flex-1 border-t border-gray-700" />
-        </div>
-
-        <input
-          className="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 uppercase tracking-widest text-center text-lg"
-          placeholder="Codigo"
-          value={roomCode}
-          onChange={(e) => setRoomCode(e.target.value)}
-          maxLength={6}
-        />
-
-        <button
-          onClick={handleJoin}
-          className="w-full p-4 rounded-lg bg-gray-700 hover:bg-gray-600 active:bg-gray-500 text-white font-semibold text-lg transition"
-        >
-          Entrar na Sala
-        </button>
 
         {error ? (
-          <div className="p-3 rounded-lg bg-red-900/50 border border-red-700 text-red-300 text-sm text-center animate-pulse">
+          <div className="px-5 py-4 rounded-xl bg-accent-danger/10 border border-accent-danger/20
+                          text-accent-danger text-sm text-center animate-slide-up">
             {error}
           </div>
         ) : null}
