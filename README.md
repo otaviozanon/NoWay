@@ -6,7 +6,7 @@
 <p align="center"><strong>Nem Ferrando!</strong> — Jogo de blefe e curiosidades</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/jogadores-2%20a%2010-orange" />
+  <img src="https://img.shields.io/badge/jogadores-2%20a%2015-orange" />
   <img src="https://img.shields.io/badge/rodadas-10-yellow" />
   <img src="https://img.shields.io/badge/perguntas-1500-red" />
   <img src="https://img.shields.io/badge/multiplayer-online-green" />
@@ -44,7 +44,7 @@ A resposta e revelada. Quem errou **leva a carta** — e no final, quem tiver ma
 ## Como Jogar Online
 
 1. Entre na sala com o codigo de **6 digitos**
-2. Compartilhe com seus amigos (ate 10 jogadores)
+2. Compartilhe com seus amigos (ate 15 jogadores)
 3. Escolha **Regras Basicas** ou **Avancadas**
 4. **10 rodadas** de pura tensao e risada
 

@@ -1,5 +1,5 @@
 // Gerenciamento de salas: criar, entrar, sair, transferir host
-// Codigo da sala: 6 caracteres alfanumericos. Maximo 10 jogadores.
+// Codigo da sala: 6 caracteres alfanumericos. Maximo 15 jogadores.
 // crypto.randomUUID() para IDs unicos de jogador.
 import { Room, Player, RuleSet } from "./types";
 import { shuffleDeck } from "./deck";
@@ -44,7 +44,7 @@ export function createRoom(playerName: string, ruleSet: RuleSet): Room {
 
 export function joinRoom(room: Room, playerName: string): Room {
   if (room.status !== "waiting") throw new Error("Nao e possivel entrar em uma partida em andamento");
-  if (room.players.length >= 10) throw new Error("Sala cheia (maximo 10 jogadores)");
+  if (room.players.length >= 15) throw new Error("Sala cheia (maximo 15 jogadores)");
   const newPlayer: Player = {
     id: generateId(),
     name: playerName,

@@ -49,7 +49,7 @@ export default function HomePage() {
             </h1>
             <p className="text-text-secondary text-lg mt-1 font-medium">Nem Ferrando!</p>
           </div>
-          <p className="text-text-muted text-sm">Jogo de blefe e curiosidades • 2-10 jogadores</p>
+          <p className="text-text-muted text-sm">Jogo de blefe e curiosidades • 2-15 jogadores</p>
         </div>
 
         <div className="space-y-4">
