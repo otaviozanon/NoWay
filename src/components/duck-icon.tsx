@@ -1,41 +1,11 @@
 "use client";
 
+const DUCK_PATH = "M21.38 10.08a.98.98 0 0 0-1.09.22l-.22.22c-.41.41-.83.72-1.24.93c-1.7.85-3.69.71-5.2-.33a5.48 5.48 0 0 0 1.27-4.6c-.39-2.18-2.09-3.94-4.24-4.39c-1.66-.34-3.35.06-4.64 1.11a5.5 5.5 0 0 0-2.01 3.81l-.03-.04h-2s0 2.72 2.6 2.97q.21.405.48.78A6.01 6.01 0 0 0 2 16.58c.28 3.04 3 5.43 6.18 5.43h6.1c4.38 0 7.69-3.01 7.69-7v-4c0-.4-.24-.77-.62-.92ZM20 15c0 2.9-2.39 5-5.69 5h-6.1c-2.16 0-4-1.59-4.19-3.61c-.16-1.72.79-3.35 2.37-4.05c.28-.12.56-.28.88-.49c.27-.18.44-.47.45-.79s-.13-.63-.38-.83C6.49 9.56 6 8.56 6 7.5s.47-2.05 1.29-2.72c.63-.52 1.4-.78 2.2-.78c.25 0 .51.03.77.08c1.34.28 2.44 1.42 2.68 2.78c.24 1.34-.3 2.67-1.4 3.47a.98.98 0 0 0-.41.73c-.02.29.08.58.29.79l.1.1c2.15 2.15 5.45 2.67 8.21 1.29c.09-.04.18-.09.27-.14v1.92Z M9 6a1 1 0 1 0 0 2a1 1 0 1 0 0-2";
+
 export function DuckIcon({ size = 24, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
-      <ellipse cx="28" cy="28" rx="14" ry="12" fill="currentColor" opacity="0.15" />
-      <path d="M14 28c0-3 1-5 3-7l2 3c-1 1-2 3-2 4h-3z" fill="currentColor" opacity="0.6" />
-      <ellipse cx="24" cy="26" rx="10" ry="8" fill="currentColor" />
-      <circle cx="24" cy="18" r="9" fill="currentColor" />
-      <circle cx="21" cy="16" r="1.8" fill="#0a0a0a" />
-      <circle cx="21.8" cy="15.5" r="0.6" fill="white" />
-      <circle cx="28" cy="16" r="1.8" fill="#0a0a0a" />
-      <circle cx="28.8" cy="15.5" r="0.6" fill="white" />
-      <path d="M22 21c0 3 2 4 4 4s4-1 4-4" stroke="#0a0a0a" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      <path d="M34 20l4-3" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
-      <circle cx="38" cy="16" r="2" fill="currentColor" opacity="0.4" />
-      <path d="M34 28c4-1 8-2 11-1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
-      <path d="M18 34c2 4 6 7 10 7s8-3 10-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.3" />
-    </svg>
-  );
-}
-
-export function DuckIconSmall({ size = 16, className = "" }: { size?: number; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
-      <ellipse cx="14" cy="15" rx="7" ry="6" fill="currentColor" opacity="0.12" />
-      <path d="M7 15c0-1.5.5-2.5 1.5-3.5l1 1.5c-.5.5-1 1.5-1 2h-1.5z" fill="currentColor" opacity="0.5" />
-      <ellipse cx="12" cy="14" rx="5" ry="4" fill="currentColor" />
-      <circle cx="12" cy="10" r="4.5" fill="currentColor" />
-      <circle cx="10.5" cy="9" r="0.9" fill="#0a0a0a" />
-      <circle cx="11" cy="8.8" r="0.3" fill="white" />
-      <circle cx="14" cy="9" r="0.9" fill="#0a0a0a" />
-      <circle cx="14.5" cy="8.8" r="0.3" fill="white" />
-      <path d="M11 11.5c0 1.5 1 2 2 2s2-.5 2-2" stroke="#0a0a0a" strokeWidth="0.75" strokeLinecap="round" fill="none" />
-      <path d="M18 10.5l2-1.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" opacity="0.7" />
-      <circle cx="20" cy="8.5" r="1" fill="currentColor" opacity="0.3" />
-      <path d="M18 15c2-.5 4-1 5.5-.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
-      <path d="M9 17.5c1 2 3 3.5 5 3.5s4-1.5 5-3.5" stroke="currentColor" strokeWidth="0.75" strokeLinecap="round" opacity="0.25" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d={DUCK_PATH} />
     </svg>
   );
 }

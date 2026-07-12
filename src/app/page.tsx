@@ -40,11 +40,7 @@ export default function HomePage() {
     <main className="min-h-dvh flex items-center justify-center p-4 bg-surface">
       <div className="w-full max-w-md space-y-10 animate-fade-in">
         <div className="text-center space-y-4">
-          <div className="relative inline-block">
-            <div className="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-br from-brand/20 to-brand/5 border border-brand/20 flex items-center justify-center animate-float shadow-xl shadow-brand/10">
-              <DuckIcon size={44} className="text-brand-light" />
-            </div>
-          </div>
+          <DuckIcon size={72} className="text-brand-light animate-float drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]" />
           <div>
             <h1 className="text-5xl font-black text-text-primary tracking-tight">
               NoWay
