@@ -76,6 +76,8 @@ export function setupSocket(io: SocketIOServer): void {
           updated = addDobreiCard(updated, playerId);
           const player = updated.players.find(p => p.id === playerId);
           updated = { ...updated, lastEvent: { type: "dobrei", message: `${player?.name} ganhou Dobrei!`, playerId } };
+        } else {
+          updated = { ...updated, lastEvent: undefined };
         }
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
@@ -98,6 +100,7 @@ export function setupSocket(io: SocketIOServer): void {
         const updated: Room = {
           ...room,
           activeContest: { challengerId, challengedId: lastGuess.playerId, guessValue: lastGuess.value },
+          lastEvent: undefined,
         };
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
@@ -134,7 +137,7 @@ export function setupSocket(io: SocketIOServer): void {
         const { cardCount } = handleQuerApostar(room, true);
         doResolve(room, room.activeContest.challengerId, room.activeContest.challengedId, io, cardCount);
       } else {
-        const updated: Room = { ...room, activeContest: undefined };
+        const updated: Room = { ...room, activeContest: undefined, lastEvent: undefined };
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
       }
