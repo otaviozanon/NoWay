@@ -74,6 +74,8 @@ export function setupSocket(io: SocketIOServer): void {
         let updated = addGuess(room, playerId, value);
         if (room.ruleSet === "advanced" && qualifiesForDobrei(room, value)) {
           updated = addDobreiCard(updated, playerId);
+          const player = updated.players.find(p => p.id === playerId);
+          updated = { ...updated, lastEvent: { type: "dobrei", message: `${player?.name} ganhou uma Carta Dobrei!`, playerId } };
         }
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
@@ -148,45 +150,72 @@ export function setupSocket(io: SocketIOServer): void {
       const questionIndex = 0;
       const result = handleNaMosca(room, card, questionIndex);
       if (result.naMosca) {
-        const updated = endRound(room, "", card);
+        const player = room.players.find(p => p.id === playerId);
+        const updated = {
+          ...endRound(room, "", card),
+          lastEvent: { type: "naMosca" as const, message: `${player?.name} acertou Na Mosca! Ninguem recebe carta.`, playerId },
+          playAgainVotes: [],
+        };
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
-        io.to(room.id).emit("game:naMoscaResult", { success: true });
         checkGameEnd(updated, io);
       } else {
         let updated = room;
+        const player = room.players.find(p => p.id === playerId);
         for (const c of result.allCards || []) {
           updated = addCardToPlayer(updated, playerId, c);
         }
-        updated = { ...updated, status: "finished" };
+        updated = {
+          ...updated,
+          status: "finished" as const,
+          lastEvent: { type: "naMosca" as const, message: `${player?.name} errou Na Mosca! Recebeu TODAS as cartas!`, playerId },
+          playAgainVotes: [],
+        };
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
-        io.to(room.id).emit("game:naMoscaResult", { success: false, playerId });
         const gameResult = getLoserCards(updated);
         io.to(room.id).emit("game:end", gameResult);
       }
     });
 
     socket.on("game:playAgain", () => {
-      const oldRoom = getRoomBySocketId(socket.id);
-      if (!oldRoom) return;
-      const names = oldRoom.players.map((p) => p.name);
-      const roomId = oldRoom.id;
-      deleteRoom(roomId);
-      const newRoom = createRoom(names[0], oldRoom.ruleSet);
-      newRoom.id = roomId;
-      setRoom(roomId, newRoom);
-      socket.emit("player:id", newRoom.players[0].id);
-      for (const name of names.slice(1)) {
-        try {
-          const current = getRoom(roomId)!;
-          const updated = joinRoom(current, name);
-          updated.id = roomId;
-          setRoom(roomId, updated);
-        } catch {}
+      const room = getRoomBySocketId(socket.id);
+      if (!room) return;
+      const playerId = getPlayerIdBySocketId(socket.id);
+      if (!playerId) return;
+      const votes = [...new Set([...room.playAgainVotes, playerId])];
+      const connectedPlayers = room.players.filter(p => p.connected).length;
+      const updated = { ...room, playAgainVotes: votes };
+      setRoom(room.id, updated);
+      io.to(room.id).emit("room:state", updated);
+
+      if (votes.length >= connectedPlayers && connectedPlayers >= 2) {
+        const names = room.players.map((p) => p.name);
+        const roomId = room.id;
+        deleteRoom(roomId);
+        const newRoom = createRoom(names[0], room.ruleSet);
+        newRoom.id = roomId;
+        newRoom.status = "playing";
+        const started = startGame(joinRoom(newRoom, names[1]));
+        started.id = roomId;
+        for (const name of names.slice(2)) {
+          try {
+            const current = getRoom(roomId);
+            if (current) {
+              const updated = joinRoom(current, name);
+              updated.id = roomId;
+              updated.status = "playing";
+              setRoom(roomId, updated);
+            }
+          } catch {}
+        }
+        const finalRoom = getRoom(roomId);
+        if (finalRoom) {
+          setRoom(roomId, { ...finalRoom, status: "playing", ...startGame(finalRoom), playAgainVotes: [] });
+          const ready = getRoom(roomId);
+          if (ready) io.to(roomId).emit("room:state", ready);
+        }
       }
-      const finalRoom = getRoom(roomId);
-      if (finalRoom) io.to(roomId).emit("room:state", finalRoom);
     });
 
     socket.on("disconnect", () => {
@@ -223,6 +252,17 @@ function doResolve(room: Room, challengerId: string, challengedId: string, io: S
     const nextCard = updated.deck[updated.currentCardIndex];
     if (nextCard) updated = endRound(updated, loserId, nextCard);
   }
+  const loser = updated.players.find(p => p.id === loserId);
+  const totalCards = extraCards > 1 ? `${extraCards} cartas` : "1 carta";
+  updated = {
+    ...updated,
+    playAgainVotes: [],
+    lastEvent: {
+      type: "contest",
+      message: `${loser?.name || "Alguem"} recebeu ${totalCards}!`,
+      playerId: loserId,
+    }
+  };
   setRoom(room.id, updated);
   io.to(room.id).emit("room:state", updated);
   checkGameEnd(updated, io);

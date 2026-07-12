@@ -44,6 +44,12 @@ export interface Room {
     guessValue: number;
     querApostar?: boolean;
   };
+  playAgainVotes: string[];
+  lastEvent?: {
+    type: "contest" | "naMosca" | "dobrei";
+    message: string;
+    playerId: string;
+  };
 }
 
 export interface RoundResult {

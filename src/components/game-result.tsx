@@ -4,13 +4,17 @@ import { useMemo, useCallback, memo } from "react";
 import { GameResult } from "@/game-engine/types";
 import { calculateScore } from "@/game-engine/scoring";
 import { getSocket } from "@/lib/socket";
-import { Trophy, RotateCcw, Camera, CheckCircle2, XCircle } from "lucide-react";
+import { Trophy, RotateCcw, Camera, CheckCircle2, XCircle, Users } from "lucide-react";
 
-interface Props { result: GameResult; ruleSet: "basic" | "advanced"; }
+interface Props { result: GameResult; ruleSet: "basic" | "advanced"; myPlayerId: string | null; playAgainVotes: string[]; players: { id: string; name: string }[]; }
 
-function GameResultDisplay({ result, ruleSet }: Props) {
+function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, players }: Props) {
   const sorted = useMemo(() => [...result.players].sort((a, b) => calculateScore(a, ruleSet) - calculateScore(b, ruleSet)), [result.players, ruleSet]);
   const handlePlayAgain = useCallback(() => { getSocket().emit("game:playAgain"); }, []);
+
+  const hasVoted = myPlayerId ? playAgainVotes.includes(myPlayerId) : false;
+  const totalPlayers = players.length;
+  const connectedPlayers = players.filter(p => result.players.some(rp => rp.id === p.id)).length;
 
   return (
     <div className="space-y-8 animate-scale-in">
@@ -40,9 +44,31 @@ function GameResultDisplay({ result, ruleSet }: Props) {
       </div>
       <div className="flex items-center gap-3 px-5 py-4 rounded-xl bg-surface-raised border border-accent-warning/10">
         <Camera size={20} className="text-accent-warning" />
-        <p className="text-accent-warning text-sm">Tire uma foto do Pato da Mesa! <span className="font-mono text-xs">#patodamesa</span></p>
+        <p className="text-accent-warning text-sm">Tire um print do Pato da Mesa! <span className="font-mono text-xs">#patodamesa</span></p>
       </div>
-      <button onClick={handlePlayAgain} className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-xl bg-brand hover:bg-brand/90 active:scale-[0.98] text-black font-semibold text-lg transition-all duration-200 touch-target shadow-lg shadow-brand/25"><RotateCcw size={22} />Nova Partida</button>
+
+      <div className="p-4 rounded-xl bg-surface-card border border-white/5 space-y-3">
+        <div className="flex items-center gap-2 text-sm text-text-secondary"><Users size={16} />Nova partida</div>
+        <div className="flex flex-wrap gap-2">
+          {players.map(p => {
+            const voted = playAgainVotes.includes(p.id);
+            return (
+              <span key={p.id} className={`px-3 py-1.5 rounded-lg text-xs font-medium ${voted ? "bg-accent-success/20 text-accent-success border border-accent-success/30" : "bg-surface-raised text-text-muted border border-white/5"}`}>
+                {p.name} {voted ? "✓" : "..."}
+              </span>
+            );
+          })}
+        </div>
+        <p className="text-xs text-text-muted">{playAgainVotes.length}/{connectedPlayers} jogadores prontos</p>
+      </div>
+
+      {!hasVoted ? (
+        <button onClick={handlePlayAgain} className="w-full flex items-center justify-center gap-3 px-6 py-5 rounded-xl bg-brand hover:bg-brand/90 active:scale-[0.98] text-black font-semibold text-lg transition-all duration-200 touch-target shadow-lg shadow-brand/25">
+          <RotateCcw size={22} />Quero Jogar Novamente
+        </button>
+      ) : (
+        <p className="text-center text-text-muted text-sm">Aguardando outros jogadores...</p>
+      )}
     </div>
   );
 }

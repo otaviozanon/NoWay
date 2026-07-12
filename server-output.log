@@ -1,0 +1,29 @@
+> Ready on http://localhost:3000
+(node:41560) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling / ...
+ ✓ Compiled / in 3.9s (692 modules)
+ GET / 200 in 4345ms
+ GET / 200 in 55ms
+ ○ Compiling /sala/[id] ...
+ ✓ Compiled /sala/[id] in 1019ms (709 modules)
+ GET / 200 in 100ms
+ GET /sala/O48OZL 200 in 1856ms
+ GET /sala/O48OZL 200 in 33ms
+ GET /sala/O48OZL 200 in 35ms
+ ○ Compiling /jogo/[id] ...
+ ✓ Compiled /jogo/[id] in 1070ms (746 modules)
+ GET /jogo/O48OZL 200 in 1889ms
+ GET /jogo/O48OZL 200 in 1903ms
+ ✓ Compiled in 890ms (319 modules)
+ GET /jogo/O48OZL 200 in 49ms
+ ✓ Compiled in 400ms (319 modules)
+ GET /jogo/O48OZL 200 in 47ms
+ ✓ Compiled in 351ms (319 modules)
+ ✓ Compiled in 302ms (319 modules)
+ ✓ Compiled in 319ms (319 modules)
+ ✓ Compiled in 317ms (319 modules)
+ ✓ Compiled in 327ms (319 modules)
+ ✓ Compiled in 1118ms (760 modules)
+ ✓ Compiled in 739ms (760 modules)
+ ✓ Compiled in 829ms (760 modules)

@@ -35,6 +35,7 @@ export function createRoom(playerName: string, ruleSet: RuleSet): Room {
     guesses: [],
     usedCardIds: [],
     ruleSet,
+    playAgainVotes: [],
   };
 }
 
