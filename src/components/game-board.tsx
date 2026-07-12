@@ -49,7 +49,7 @@ function GameBoard() {
             {room.guesses.map((g, i) => (
               <div key={i} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-card border border-border text-xs">
                 <span className="text-text-muted">{room.players.find(p => p.id === g.playerId)?.name}</span>
-                <span className="font-mono text-text-primary font-bold tabular-nums">{g.value}</span>
+                <span className="font-mono text-text-primary font-bold tabular-nums">{g.value.toLocaleString("pt-BR")}</span>
                 {i < room.guesses.length - 1 ? <span className="text-text-muted/30">&gt;</span> : null}
               </div>
             ))}

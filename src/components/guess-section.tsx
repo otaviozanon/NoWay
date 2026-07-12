@@ -5,14 +5,32 @@ import { getSocket } from "@/lib/socket";
 import { Room } from "@/game-engine/types";
 import { Send, Swords, Zap, AlertTriangle, Hand, Clock } from "lucide-react";
 
+function fmt(n: string): string {
+  const num = parseInt(n.replace(/\D/g, ""));
+  if (isNaN(num)) return "";
+  return num.toLocaleString("pt-BR");
+}
+
+function unfmt(s: string): string {
+  return s.replace(/\D/g, "");
+}
+
 interface Props { room: Room; myPlayerId: string | null; isMyTurn: boolean; hasActiveContest: boolean; isChallengedInQuerApostar: boolean; }
 
 function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChallengedInQuerApostar }: Props) {
-  const [guessValue, setGuessValue] = useState("");
+  const [raw, setRaw] = useState("");
   const lastGuess = room.guesses[room.guesses.length - 1];
   const minGuess = lastGuess ? lastGuess.value + 1 : 1;
 
-  const hGuess = useCallback(() => { const v = parseInt(guessValue); if (isNaN(v) || v < minGuess) return; getSocket().emit("game:guess", { value: v }); setGuessValue(""); }, [guessValue, minGuess]);
+  const display = raw ? fmt(raw) : "";
+  const parsed = parseInt(raw);
+
+  const hGuess = useCallback(() => {
+    if (isNaN(parsed) || parsed < minGuess) return;
+    getSocket().emit("game:guess", { value: parsed });
+    setRaw("");
+  }, [parsed, minGuess]);
+
   const hContest = useCallback(() => getSocket().emit("game:contest"), []);
   const hAccept = useCallback(() => getSocket().emit("game:contest:accept"), []);
   const hApostar = useCallback(() => getSocket().emit("game:querApostar"), []);
@@ -26,11 +44,14 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
       <div className="space-y-3 animate-slide-up">
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <input type="number" min={minGuess}
+            <input type="text" inputMode="numeric"
               className="w-full p-5 rounded-2xl bg-surface-card border-2 border-border text-white text-2xl font-mono font-black
                          placeholder:text-text-muted/30 focus:outline-none focus:border-brand/50 transition-all duration-300 touch-target text-center tracking-wider"
-              placeholder={`> ${minGuess - 1}`} value={guessValue} onChange={e => setGuessValue(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && hGuess()} autoFocus />
+              placeholder={`> ${minGuess.toLocaleString("pt-BR")}`}
+              value={display}
+              onChange={e => setRaw(unfmt(e.target.value))}
+              onKeyDown={e => e.key === "Enter" && hGuess()}
+              autoFocus />
           </div>
           <button onClick={hGuess} className="flex items-center gap-2 px-8 py-5 rounded-2xl bg-gradient-to-br from-brand to-brand-dark hover:from-brand-light hover:to-brand active:scale-[0.97] text-black font-black text-lg transition-all duration-200 touch-target shadow-xl shadow-brand/30"><Send size={20} />Palpite</button>
         </div>
@@ -76,3 +97,4 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
 }
 
 export default memo(GuessSection);
+
