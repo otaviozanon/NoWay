@@ -13,6 +13,9 @@ export default function GamePage() {
   useEffect(() => {
     setupSocketListeners();
     connectSocket();
+  }, []);
+
+  useEffect(() => {
     if (!room) router.push("/");
   }, [room, router]);
 

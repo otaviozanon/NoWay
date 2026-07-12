@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import { getSocket } from "@/lib/socket";
 import { Room } from "@/game-engine/types";
 
@@ -12,23 +12,22 @@ interface Props {
   isChallengedInQuerApostar: boolean;
 }
 
-export default function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChallengedInQuerApostar }: Props) {
+function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChallengedInQuerApostar }: Props) {
   const [guessValue, setGuessValue] = useState("");
-  const socket = getSocket();
   const lastGuess = room.guesses[room.guesses.length - 1];
   const minGuess = lastGuess ? lastGuess.value + 1 : 1;
 
-  function handleGuess() {
+  const handleGuess = useCallback(() => {
     const val = parseInt(guessValue);
     if (isNaN(val) || val < minGuess) return;
-    socket.emit("game:guess", { value: val });
+    getSocket().emit("game:guess", { value: val });
     setGuessValue("");
-  }
+  }, [guessValue, minGuess]);
 
-  function handleContest() { socket.emit("game:contest"); }
-  function handleQuerApostar() { socket.emit("game:querApostar"); }
-  function handleApostarResponse(keep: boolean) { socket.emit("game:querApostar:response", { keep }); }
-  function handleNaMosca() { socket.emit("game:naMosca"); }
+  const handleContest = useCallback(() => { getSocket().emit("game:contest"); }, []);
+  const handleQuerApostar = useCallback(() => { getSocket().emit("game:querApostar"); }, []);
+  const handleApostarResponse = useCallback((keep: boolean) => { getSocket().emit("game:querApostar:response", { keep }); }, []);
+  const handleNaMosca = useCallback(() => { getSocket().emit("game:naMosca"); }, []);
 
   if (room.status === "finished") return null;
 
@@ -43,23 +42,23 @@ export default function GuessSection({ room, myPlayerId, isMyTurn, hasActiveCont
             placeholder={`Maior que ${minGuess - 1}`}
             value={guessValue}
             onChange={(e) => setGuessValue(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleGuess()}
+            onKeyDown={(e) => e.key === "Enter" ? handleGuess() : null}
             autoFocus
           />
           <button onClick={handleGuess} className="px-8 py-4 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-lg transition">
             Palpite
           </button>
         </div>
-        {lastGuess && lastGuess.playerId !== myPlayerId && (
+        {lastGuess && lastGuess.playerId !== myPlayerId ? (
           <button onClick={handleContest} className="w-full p-4 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-xl transition">
             Nem a Pato!
           </button>
-        )}
-        {lastGuess && room.ruleSet === "advanced" && (
+        ) : null}
+        {lastGuess && room.ruleSet === "advanced" ? (
           <button onClick={handleNaMosca} className="w-full p-3 rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white font-semibold transition">
             Na Mosca!
           </button>
-        )}
+        ) : null}
       </div>
     );
   }
@@ -90,3 +89,5 @@ export default function GuessSection({ room, myPlayerId, isMyTurn, hasActiveCont
     </p>
   );
 }
+
+export default memo(GuessSection);

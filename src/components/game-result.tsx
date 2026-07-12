@@ -1,16 +1,26 @@
 "use client";
 
+import { useMemo } from "react";
 import { GameResult } from "@/game-engine/types";
 import { calculateScore } from "@/game-engine/scoring";
 import { getSocket } from "@/lib/socket";
+import { useCallback } from "react";
+import { memo } from "react";
 
 interface Props {
   result: GameResult;
   ruleSet: "basic" | "advanced";
 }
 
-export default function GameResultDisplay({ result, ruleSet }: Props) {
-  const sorted = [...result.players].sort((a, b) => calculateScore(a, ruleSet) - calculateScore(b, ruleSet));
+function GameResultDisplay({ result, ruleSet }: Props) {
+  const sorted = useMemo(
+    () => [...result.players].sort((a, b) => calculateScore(a, ruleSet) - calculateScore(b, ruleSet)),
+    [result.players, ruleSet],
+  );
+
+  const handlePlayAgain = useCallback(() => {
+    getSocket().emit("game:playAgain");
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -50,7 +60,7 @@ export default function GameResultDisplay({ result, ruleSet }: Props) {
       </p>
 
       <button
-        onClick={() => getSocket().emit("game:playAgain")}
+        onClick={handlePlayAgain}
         className="w-full p-4 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-semibold text-lg transition"
       >
         Nova Partida
@@ -58,3 +68,5 @@ export default function GameResultDisplay({ result, ruleSet }: Props) {
     </div>
   );
 }
+
+export default memo(GameResultDisplay);

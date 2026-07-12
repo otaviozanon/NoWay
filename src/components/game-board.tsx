@@ -1,11 +1,12 @@
 "use client";
 
+import { memo } from "react";
 import { useGameStore } from "@/lib/store";
 import CardDisplay from "./card-display";
 import GuessSection from "./guess-section";
 import GameResultDisplay from "./game-result";
 
-export default function GameBoard() {
+function GameBoard() {
   const { room, myPlayerId, gameResult } = useGameStore();
 
   if (gameResult && room) {
@@ -27,7 +28,7 @@ export default function GameBoard() {
     <div className="space-y-6">
       <CardDisplay card={card} questionIndex={questionIndex} round={room.currentRound} />
 
-      {room.guesses.length > 0 && (
+      {room.guesses.length > 0 ? (
         <div className="space-y-2">
           <p className="text-sm text-gray-500">Historico de palpites:</p>
           {room.guesses.map((g, i) => (
@@ -39,7 +40,7 @@ export default function GameBoard() {
             </div>
           ))}
         </div>
-      )}
+      ) : null}
 
       <div className="text-center text-sm">
         <span className="text-gray-400">Turno de </span>
@@ -71,9 +72,9 @@ export default function GameBoard() {
               <span className="truncate">{p.name}</span>
               <span className="text-gray-400 text-xs ml-1">
                 {p.cards.length}c
-                {p.dobreiCards > 0 && (
+                {p.dobreiCards > 0 ? (
                   <span className="text-green-400"> -{p.dobreiCards}</span>
-                )}
+                ) : null}
               </span>
             </div>
           </div>
@@ -82,3 +83,5 @@ export default function GameBoard() {
     </div>
   );
 }
+
+export default memo(GameBoard);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { connectSocket, getSocket } from "@/lib/socket";
 import { setupSocketListeners, useGameStore } from "@/lib/store";
@@ -15,28 +15,28 @@ export default function HomePage() {
 
   useEffect(() => {
     setupSocketListeners();
-    const socket = connectSocket();
+    connectSocket();
+  }, []);
 
+  useEffect(() => {
+    const socket = getSocket();
     function onRoomState(room: Room) {
       router.push(`/sala/${room.id}`);
     }
     socket.on("room:state", onRoomState);
-
-    return () => {
-      socket.off("room:state", onRoomState);
-    };
+    return () => { socket.off("room:state", onRoomState); };
   }, [router]);
 
-  function handleCreate() {
+  const handleCreate = useCallback(() => {
     if (!name.trim()) { setError("Digite seu nome"); return; }
     getSocket().emit("room:create", { playerName: name.trim(), ruleSet });
-  }
+  }, [name, ruleSet, setError]);
 
-  function handleJoin() {
+  const handleJoin = useCallback(() => {
     if (!name.trim()) { setError("Digite seu nome"); return; }
     if (!roomCode.trim()) { setError("Digite o codigo da sala"); return; }
     getSocket().emit("room:join", { roomId: roomCode.trim().toUpperCase(), playerName: name.trim() });
-  }
+  }, [name, roomCode, setError]);
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
@@ -102,11 +102,11 @@ export default function HomePage() {
           Entrar na Sala
         </button>
 
-        {error && (
+        {error ? (
           <div className="p-3 rounded-lg bg-red-900/50 border border-red-700 text-red-300 text-sm text-center animate-pulse">
             {error}
           </div>
-        )}
+        ) : null}
       </div>
     </main>
   );

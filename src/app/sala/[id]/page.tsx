@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getSocket } from "@/lib/socket";
 import { useGameStore } from "@/lib/store";
@@ -12,32 +12,33 @@ export default function RoomPage() {
 
   useEffect(() => {
     if (!room) { router.push("/"); return; }
+  }, [room, router]);
 
-    function onGameUpdate(updated: typeof room) {
+  useEffect(() => {
+    const socket = getSocket();
+    function onGameUpdate(updated: ReturnType<typeof useGameStore.getState>["room"]) {
       useGameStore.getState().setRoom(updated);
       if (updated && updated.status === "playing") {
         router.push(`/jogo/${params.id}`);
       }
     }
-
-    const socket = getSocket();
     socket.on("room:state", onGameUpdate);
     return () => { socket.off("room:state", onGameUpdate); };
-  }, [room, router, params.id]);
+  }, []);
 
   if (!room) return null;
 
   const isHost = myPlayerId === room.host;
   const canStart = room.players.length >= 2;
 
-  function handleStart() {
+  const handleStart = useCallback(() => {
     if (!canStart) return;
     getSocket().emit("game:start");
-  }
+  }, [canStart]);
 
-  function handleCopyCode() {
-    navigator.clipboard.writeText(room!.id).catch(() => {});
-  }
+  const handleCopyCode = useCallback(() => {
+    navigator.clipboard.writeText(room.id).catch(() => {});
+  }, [room.id]);
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
@@ -68,9 +69,9 @@ export default function RoomPage() {
                 <div className={`w-3 h-3 rounded-full ${p.connected ? "bg-green-500" : "bg-yellow-500"}`} />
                 <span className="flex-1">
                   {p.name}
-                  {p.id === myPlayerId && <span className="text-gray-500 ml-1">(voce)</span>}
+                  {p.id === myPlayerId ? <span className="text-gray-500 ml-1">(voce)</span> : null}
                 </span>
-                {p.id === room.host && <span className="text-yellow-500 text-xs font-semibold">HOST</span>}
+                {p.id === room.host ? <span className="text-yellow-500 text-xs font-semibold">HOST</span> : null}
               </div>
             ))}
           </div>

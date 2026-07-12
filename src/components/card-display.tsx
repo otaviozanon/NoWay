@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { Card } from "@/game-engine/types";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
   round: number;
 }
 
-export default function CardDisplay({ card, questionIndex, round }: Props) {
+function CardDisplay({ card, questionIndex, round }: Props) {
   return (
     <div className="bg-gray-800 rounded-xl p-6 border-l-4 border-purple-500">
       <div className="flex justify-between items-start mb-4">
@@ -26,3 +27,5 @@ export default function CardDisplay({ card, questionIndex, round }: Props) {
     </div>
   );
 }
+
+export default memo(CardDisplay);

@@ -23,7 +23,7 @@ export const useGameStore = create<GameStore>((set) => ({
 
   setRoom: (room) => set({ room, error: null }),
   setMyPlayerId: (id) => set({ myPlayerId: id }),
-  setGameResult: (result) => set({ gameResult: result, room: result ? { ...result.players, status: "finished" } as unknown as Room : null }),
+  setGameResult: (result) => set({ gameResult: result }),
   setError: (error) => set({ error }),
   reset: () => set({ room: null, myPlayerId: null, gameResult: null, error: null }),
 }));
