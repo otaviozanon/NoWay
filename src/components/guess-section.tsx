@@ -43,11 +43,11 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
 
   if (isMyTurn && !hasActiveContest && !querApostarActive) {
     return (
-      <div className="space-y-3 animate-slide-up">
+      <div className="space-y-2.5 animate-slide-up">
         <div className="flex gap-2">
           <div className="relative flex-1">
             <input type="text" inputMode="numeric"
-              className="w-full p-5 rounded-2xl bg-surface-card border-2 border-border text-white text-2xl font-mono font-black
+              className="w-full p-4 rounded-2xl bg-surface-card border-2 border-border text-white text-xl font-mono font-black
                          placeholder:text-text-muted/30 focus:outline-none focus:border-brand/50 transition-all duration-300 touch-target text-center tracking-wider"
               placeholder={`> ${minGuess.toLocaleString("pt-BR")}`}
               value={display}
@@ -55,13 +55,13 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
               onKeyDown={e => e.key === "Enter" && hGuess()}
               autoFocus />
           </div>
-          <button onClick={hGuess} className="flex items-center gap-2 px-8 py-5 rounded-2xl bg-gradient-to-br from-brand to-brand-dark hover:from-brand-light hover:to-brand active:scale-[0.97] text-black font-black text-lg transition-all duration-200 touch-target shadow-xl shadow-brand/30"><Send size={20} />Palpite</button>
+          <button onClick={hGuess} className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-gradient-to-br from-brand to-brand-dark hover:from-brand-light hover:to-brand active:scale-[0.97] text-black font-black text-lg transition-all duration-200 touch-target shadow-xl shadow-brand/30"><Send size={20} />Palpite</button>
         </div>
         {lastGuess && lastGuess.playerId !== myPlayerId ? (
-          <button onClick={hContest} className="w-full flex items-center justify-center gap-3 p-5 rounded-2xl bg-gradient-to-r from-accent-danger to-accent-danger/90 hover:from-accent-danger/90 active:scale-[0.98] text-white font-black text-xl transition-all duration-200 touch-target shadow-xl shadow-accent-danger/30 tracking-wide"><Swords size={24} />Nem Ferrando!</button>
+          <button onClick={hContest} className="w-full flex items-center justify-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-accent-danger to-accent-danger/90 hover:from-accent-danger/90 active:scale-[0.98] text-white font-black text-lg transition-all duration-200 touch-target shadow-xl shadow-accent-danger/30 tracking-wide"><Swords size={20} />Nem Ferrando!</button>
         ) : null}
         {lastGuess && room.ruleSet === "advanced" ? (
-          <button onClick={hMosca} className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl bg-surface-card border-2 border-accent-warning/20 hover:bg-accent-warning/5 hover:border-accent-warning/40 active:scale-[0.98] text-accent-warning font-bold text-lg transition-all duration-200 touch-target"><Zap size={20} />Na Mosca!</button>
+          <button onClick={hMosca} className="w-full flex items-center justify-center gap-2 p-3 rounded-2xl bg-surface-card border-2 border-accent-warning/20 hover:bg-accent-warning/5 hover:border-accent-warning/40 active:scale-[0.98] text-accent-warning font-bold text-base transition-all duration-200 touch-target"><Zap size={18} />Na Mosca!</button>
         ) : null}
       </div>
     );
@@ -69,11 +69,11 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
 
   if (isChallengedInQuerApostar) {
     return (
-      <div className="p-5 rounded-2xl bg-surface-card border-2 border-accent-warning/20 space-y-4 animate-scale-in shadow-lg">
-        <div className="flex items-center gap-3"><div className="w-10 h-10 rounded-xl bg-accent-warning/10 flex items-center justify-center"><AlertTriangle size={22} className="text-accent-warning" /></div><p className="text-accent-warning font-bold text-lg">Palpite contestado!</p></div>
-        <div className="flex gap-3">
-          <button onClick={hAccept} className="flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl bg-surface-raised border-2 border-border hover:border-white/10 active:scale-[0.98] text-text-primary font-bold transition-all duration-200 touch-target"><Hand size={20} />Aceitar</button>
-          <button onClick={hApostar} className="flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl bg-gradient-to-br from-accent-warning to-accent-warning/90 hover:from-accent-warning/90 active:scale-[0.98] text-black font-black text-lg transition-all duration-200 touch-target shadow-xl shadow-accent-warning/30"><Swords size={20} />Quer Apostar?</button>
+      <div className="p-4 rounded-2xl bg-surface-card border-2 border-accent-warning/20 space-y-3 animate-scale-in shadow-lg">
+        <div className="flex items-center gap-2"><div className="w-8 h-8 rounded-xl bg-accent-warning/10 flex items-center justify-center"><AlertTriangle size={18} className="text-accent-warning" /></div><p className="text-accent-warning font-bold text-base">Palpite contestado!</p></div>
+        <div className="flex gap-2">
+          <button onClick={hAccept} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-2xl bg-surface-raised border-2 border-border hover:border-white/10 active:scale-[0.98] text-text-primary font-bold transition-all duration-200 touch-target"><Hand size={18} />Aceitar</button>
+          <button onClick={hApostar} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-2xl bg-gradient-to-br from-accent-warning to-accent-warning/90 hover:from-accent-warning/90 active:scale-[0.98] text-black font-black text-base transition-all duration-200 touch-target shadow-xl shadow-accent-warning/30"><Swords size={18} />Quer Apostar?</button>
         </div>
       </div>
     );
@@ -81,21 +81,21 @@ function GuessSection({ room, myPlayerId, isMyTurn, hasActiveContest, isChalleng
 
   if (room.activeContest?.challengerId === myPlayerId && room.activeContest?.querApostar) {
     return (
-      <div className="p-5 rounded-2xl bg-surface-card border-2 border-accent-warning/20 space-y-4 animate-scale-in shadow-lg">
-        <div className="flex items-center gap-3"><Swords size={22} className="text-accent-warning" /><p className="text-accent-warning font-bold text-lg">Ele quer apostar! Mantem?</p></div>
-        <div className="flex gap-3">
-          <button onClick={() => hResp(false)} className="flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl bg-surface-raised border-2 border-border hover:border-white/10 active:scale-[0.98] text-text-primary font-bold transition-all duration-200 touch-target"><Hand size={20} />Desistir</button>
-          <button onClick={() => hResp(true)} className="flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl bg-gradient-to-br from-accent-warning to-accent-warning/90 active:scale-[0.98] text-black font-black text-lg transition-all duration-200 touch-target shadow-xl shadow-accent-warning/30"><Swords size={20} />Manter Aposta</button>
+      <div className="p-4 rounded-2xl bg-surface-card border-2 border-accent-warning/20 space-y-3 animate-scale-in shadow-lg">
+        <div className="flex items-center gap-2"><Swords size={18} className="text-accent-warning" /><p className="text-accent-warning font-bold text-base">Ele quer apostar! Mantem?</p></div>
+        <div className="flex gap-2">
+          <button onClick={() => hResp(false)} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-2xl bg-surface-raised border-2 border-border hover:border-white/10 active:scale-[0.98] text-text-primary font-bold transition-all duration-200 touch-target"><Hand size={18} />Desistir</button>
+          <button onClick={() => hResp(true)} className="flex-1 flex items-center justify-center gap-2 p-4 rounded-2xl bg-gradient-to-br from-accent-warning to-accent-warning/90 active:scale-[0.98] text-black font-black text-base transition-all duration-200 touch-target shadow-xl shadow-accent-warning/30"><Swords size={18} />Manter Aposta</button>
         </div>
       </div>
     );
   }
 
   if (hasActiveContest && !isMyTurn) {
-    return <div className="flex items-center justify-center gap-3 py-5 px-4 rounded-2xl bg-surface-card border border-border animate-pulse"><div className="w-2 h-2 rounded-full bg-accent-warning animate-pulse" /><p className="text-text-muted text-sm font-medium">Decidindo...</p></div>;
+    return <div className="flex items-center justify-center gap-2 py-4 px-3 rounded-2xl bg-surface-card border border-border animate-pulse"><div className="w-2 h-2 rounded-full bg-accent-warning animate-pulse" /><p className="text-text-muted text-sm font-medium">Decidindo...</p></div>;
   }
 
-  return <div className="flex items-center justify-center gap-3 py-5 px-4 rounded-2xl bg-surface-card/50 border border-border"><Clock size={18} className="text-text-muted" /><p className="text-text-muted text-sm font-medium">Aguardando proximo jogador...</p></div>;
+  return <div className="flex items-center justify-center gap-2 py-4 px-3 rounded-2xl bg-surface-card/50 border border-border"><Clock size={16} className="text-text-muted" /><p className="text-text-muted text-sm font-medium">Aguardando proximo jogador...</p></div>;
 }
 
 export default memo(GuessSection);

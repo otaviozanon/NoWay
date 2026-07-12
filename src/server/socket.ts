@@ -161,16 +161,28 @@ export function setupSocket(io: SocketIOServer): void {
       const questionIndex = 0;
       const result = handleNaMosca(room, card, questionIndex);
       if (result.naMosca) {
-        const player = room.players.find(p => p.id === playerId);
+        const answer = card.questions[questionIndex].answer;
         const updated = {
           ...endRound(room, "", card),
-          lastEvent: { type: "naMosca" as const, message: `Na Mosca! Ninguem leva carta.`, playerId },
+          currentPlayerIndex: -1,
+          lastEvent: { type: "naMosca" as const, message: `Na Mosca! Ninguem leva carta.`, playerId, answer },
           playAgainVotes: [],
         };
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
-        checkGameEnd(updated, io);
+        setTimeout(() => {
+          const r = getRoom(room.id);
+          if (!r) return;
+          if (isGameOver(r)) {
+            checkGameEnd(r, io);
+          } else {
+            const resumed = { ...r, currentPlayerIndex: 0, lastEvent: undefined };
+            setRoom(room.id, resumed);
+            io.to(room.id).emit("room:state", resumed);
+          }
+        }, 7500);
       } else {
+        const answer = card.questions[questionIndex].answer;
         let updated = room;
         const player = room.players.find(p => p.id === playerId);
         for (const c of result.allCards || []) {
@@ -178,14 +190,27 @@ export function setupSocket(io: SocketIOServer): void {
         }
         updated = {
           ...updated,
-          status: "finished" as const,
-          lastEvent: { type: "naMosca" as const, message: `${player?.name} errou Na Mosca! Levou TODAS!`, playerId },
+          currentCardIndex: updated.currentCardIndex + 1,
+          currentRound: updated.currentRound + 1,
+          usedCardIds: [...updated.usedCardIds, card.id],
+          guesses: [],
+          currentPlayerIndex: -1,
+          activeContest: undefined,
           playAgainVotes: [],
+          lastEvent: { type: "naMosca" as const, message: `${player?.name} errou Na Mosca! Levou TODAS!`, playerId, answer },
         };
         setRoom(room.id, updated);
         io.to(room.id).emit("room:state", updated);
-        const gameResult = getLoserCards(updated);
-        io.to(room.id).emit("game:end", gameResult);
+
+        setTimeout(() => {
+          const r = getRoom(room.id);
+          if (!r) return;
+          const finished = { ...r, status: "finished" as const, currentPlayerIndex: 0, lastEvent: undefined };
+          setRoom(room.id, finished);
+          io.to(room.id).emit("room:state", finished);
+          const gameResult = getLoserCards(finished);
+          io.to(room.id).emit("game:end", gameResult);
+        }, 7500);
       }
     });
 
@@ -197,34 +222,26 @@ export function setupSocket(io: SocketIOServer): void {
       if (!playerId) return;
       const votes = [...new Set([...room.playAgainVotes, playerId])];
       const connectedPlayers = room.players.filter(p => p.connected).length;
-      const updated = { ...room, playAgainVotes: votes };
+      const updated = { ...room, playAgainVotes: votes, lastEvent: undefined };
       setRoom(room.id, updated);
       io.to(room.id).emit("room:state", updated);
 
       if (votes.length >= connectedPlayers && connectedPlayers >= 2) {
-        const names = room.players.map((p) => p.name);
-        const roomId = room.id;
-        deleteRoom(roomId);
-        let newRoom = createRoom(names[0], room.ruleSet);
-        newRoom.id = roomId;
-        setRoom(roomId, newRoom);
-        for (const name of names.slice(1)) {
-          try {
-            const current = getRoom(roomId);
-            if (current) {
-              const updated = joinRoom(current, name);
-              updated.id = roomId;
-              setRoom(roomId, updated);
-            }
-          } catch {}
-        }
-        const finalRoom = getRoom(roomId);
-        if (finalRoom) {
-          const started = startGame(finalRoom);
-          started.id = roomId;
-          setRoom(roomId, started);
-          io.to(roomId).emit("room:state", started);
-        }
+        const resetRoom: Room = {
+          ...room,
+          status: "playing",
+          currentRound: 1,
+          currentCardIndex: 0,
+          currentPlayerIndex: 0,
+          guesses: [],
+          usedCardIds: [],
+          playAgainVotes: [],
+          activeContest: undefined,
+          lastEvent: undefined,
+          players: room.players.map((p) => ({ ...p, cards: [], dobreiCards: 0 })),
+        };
+        setRoom(room.id, resetRoom);
+        io.to(room.id).emit("room:state", resetRoom);
       }
     });
 
@@ -267,6 +284,7 @@ function doResolve(room: Room, challengerId: string, challengedId: string, io: S
   const answer = card.questions[questionIndex].answer;
   updated = {
     ...updated,
+    currentPlayerIndex: -1,
     playAgainVotes: [],
     lastEvent: {
       type: "contest",
@@ -277,7 +295,20 @@ function doResolve(room: Room, challengerId: string, challengedId: string, io: S
   };
   setRoom(room.id, updated);
   io.to(room.id).emit("room:state", updated);
-  checkGameEnd(updated, io);
+  setTimeout(() => {
+    const r = getRoom(room.id);
+    if (!r) return;
+    if (isGameOver(r)) {
+      checkGameEnd(r, io);
+    } else {
+      const resumed = setContestWinnerAsInitialPlayer(
+        { ...r, currentPlayerIndex: 0, lastEvent: undefined },
+        loserId === challengerId ? challengedId : challengerId,
+      );
+      setRoom(room.id, resumed);
+      io.to(room.id).emit("room:state", resumed);
+    }
+  }, 7500);
 }
 
 function checkGameEnd(room: Room, io: SocketIOServer): void {

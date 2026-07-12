@@ -27,28 +27,34 @@ const catColor: Record<string, string> = {
   "CIENCIA": "border-l-violet-500/20",
 };
 
-interface Props { card: Card; questionIndex: number; round: number; }
+interface Props {
+  card: Card;
+  questionIndex: number;
+  round: number;
+  animationClass?: string;
+  cardKey?: string;
+}
 
-function CardDisplay({ card, questionIndex, round }: Props) {
+function CardDisplay({ card, questionIndex, round, animationClass = "animate-card-in", cardKey }: Props) {
   const borderL = catColor[card.theme] || "border-l-brand/20";
 
   return (
-    <div className="animate-card-in" key={card.id}>
+    <div className={animationClass} key={cardKey ?? card.id}>
       <div className={`relative overflow-hidden rounded-3xl bg-surface-card border-2 border-border ${borderL} shadow-2xl`}>
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand to-brand-light" />
-        <div className="relative p-7 space-y-5">
+        <div className="relative p-5 space-y-4">
           <div className="flex justify-between items-start">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-raised border border-border text-brand-light text-xs font-black uppercase tracking-[0.15em]">
-              <Sparkles size={14} />{card.theme}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-raised border border-border text-brand-light text-[11px] font-black uppercase tracking-[0.15em]">
+              <Sparkles size={12} />{card.theme}
             </span>
             <div className="flex items-center gap-2">
               <span className="text-text-muted text-[10px] font-bold uppercase tracking-wider">Rodada</span>
-              <span className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-surface-raised border border-border text-brand-light font-black text-xl font-mono animate-float tabular-nums">
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-2xl bg-surface-raised border border-border text-brand-light font-black text-lg font-mono animate-float tabular-nums">
                 {round}
               </span>
             </div>
           </div>
-          <p className="text-2xl text-text-primary leading-snug font-bold text-balance">{card.questions[questionIndex].text}</p>
+          <p className="text-xl text-text-primary leading-snug font-bold text-balance">{card.questions[questionIndex].text}</p>
           <div className="flex items-center justify-between">
             <span className="text-xs text-text-muted">Pergunta {questionIndex + 1}</span>
             <div className="flex items-center gap-1 text-accent-warning">

@@ -38,7 +38,11 @@ export function setupSocketListeners(): void {
   const socket = getSocket();
 
   socket.on("room:state", (room: Room) => {
-    useGameStore.getState().setRoom(room);
+    useGameStore.setState((state) => ({
+      room,
+      error: null as string | null,
+      gameResult: room.status === "playing" ? null : state.gameResult,
+    }));
   });
 
   socket.on("player:id", (id: string) => {
