@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/otavio/noway/main/public/duck.svg" width="120" alt="NoWay" />
+  <img src="./public/duck.svg" width="120" alt="NoWay" />
 </p>
 
 <h1 align="center">NoWay</h1>
