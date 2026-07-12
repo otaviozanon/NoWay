@@ -173,7 +173,7 @@ export const cards: Card[] = [
     id: 9, theme: "BRASIL", patoPoints: 2,
     questions: [
       { text: "Populacao do Brasil em milhoes (2025)", answer: 216 },
-      { text: "Numero de estados brasileiros", answer: 26 },
+      { text: "Numero de estados brasileiros", answer: 27 },
       { text: "Comprimento do rio Amazonas (km)", answer: 6992 },
       { text: "Numero de titulos mundiais de futebol do Brasil", answer: 5 },
       { text: "Porcentagem da Amazonia em territorio brasileiro", answer: 60 },
@@ -347,7 +347,7 @@ export const cards: Card[] = [
       { text: "Numero de paises no mundo (2025)", answer: 195 },
       { text: "Circunferencia da Terra no Equador (km)", answer: 40075 },
       { text: "Recorde de volta ao mundo de aviao comercial (horas)", answer: 44 },
-      { text: "Numero de continentes no mundo", answer: 6 },
+      { text: "Numero de continentes no mundo", answer: 7 },
       { text: "Numero de mares na Terra", answer: 7 },
       { text: "Porcentagem da populacao que vive no hemisferio norte", answer: 90 },
       { text: "Numero de pessoas que ja deram a volta ao mundo a pe", answer: 3 },
