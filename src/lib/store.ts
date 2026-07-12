@@ -47,9 +47,11 @@ export function setupSocketListeners(): void {
     useGameStore.getState().setGameResult(result);
   });
 
+let errorTimer: ReturnType<typeof setTimeout>;
   socket.on("error", ({ message }: { message: string }) => {
     useGameStore.getState().setError(message);
-    setTimeout(() => useGameStore.getState().setError(null), 5000);
+    clearTimeout(errorTimer);
+    errorTimer = setTimeout(() => useGameStore.getState().setError(null), 5000);
   });
 
   socket.on("disconnect", () => {

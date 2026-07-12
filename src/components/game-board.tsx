@@ -1,33 +1,36 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 import { useGameStore } from "@/lib/store";
 import CardDisplay from "./card-display";
 import GuessSection from "./guess-section";
 import GameResultDisplay from "./game-result";
-import { MessageCircle, Users, X, Zap, Swords, Sparkles, ShieldAlert } from "lucide-react";
+import { MessageCircle, Users, X, Zap, Sparkles, ShieldAlert } from "lucide-react";
 
 function GameBoard() {
   const { room, myPlayerId, gameResult } = useGameStore();
   const [toast, setToast] = useState<{ message: string; type: string } | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [resultAnswer, setResultAnswer] = useState<number | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (room?.lastEvent) {
+      clearTimeout(toastTimer.current ?? undefined);
       setToast({ message: room.lastEvent.message, type: room.lastEvent.type });
       if (room.lastEvent.type === "contest" && room.lastEvent.answer != null) {
         setShowResult(true);
         setResultAnswer(room.lastEvent.answer);
-        setTimeout(() => {
+        toastTimer.current = setTimeout(() => {
           setToast(null);
           setShowResult(false);
           setResultAnswer(null);
         }, 6000);
       } else {
-        setTimeout(() => setToast(null), 4000);
+        toastTimer.current = setTimeout(() => setToast(null), 4000);
       }
     }
+    return () => clearTimeout(toastTimer.current ?? undefined);
   }, [room?.lastEvent]);
 
   if (gameResult && room) {

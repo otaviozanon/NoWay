@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getSocket } from "@/lib/socket";
 import { useGameStore } from "@/lib/store";
-import { Copy, Play, Users, Crown, Wifi, WifiOff } from "lucide-react";
+import { Copy, Play, Users, Crown, WifiOff } from "lucide-react";
 import RulesModal from "@/components/rules-modal";
 
 export const dynamic = "force-dynamic";
@@ -18,12 +18,15 @@ export default function RoomPage() {
     if (!room) { router.push("/"); return; }
   }, [room, router]);
 
+  const idRef = useRef(params.id);
+  idRef.current = params.id;
+
   useEffect(() => {
     const socket = getSocket();
     function onGameUpdate(updated: ReturnType<typeof useGameStore.getState>["room"]) {
       if (!updated) return;
       useGameStore.getState().setRoom(updated);
-      if (updated.status === "playing") router.push(`/jogo/${params.id}`);
+      if (updated.status === "playing") router.push(`/jogo/${idRef.current}`);
     }
     socket.on("room:state", onGameUpdate);
     return () => { socket.off("room:state", onGameUpdate); };
