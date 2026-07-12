@@ -1,3 +1,9 @@
+/**
+ * Socket.IO handlers - Fluxo de jogo multiplayer.
+ * 
+ * Contestacao avancada: palpite → contest → [Aceitar | Quer Apostar(Manter|Desistir)]
+ * Contestacao basica:      palpite → contest → resolve (1 carta)
+ */
 import { Server as SocketIOServer, Socket } from "socket.io";
 import {
   createRoom, joinRoom, removePlayer, isPlayerTurn,
@@ -63,6 +69,7 @@ export function setupSocket(io: SocketIOServer): void {
       }
     });
 
+    // Palpite: cada novo palpite deve ser > anterior. Dobrei se >= 2x
     socket.on("game:guess", ({ value }: { value: number }) => {
       const room = getRoomBySocketId(socket.id);
       if (!room || room.status !== "playing") return;
@@ -86,6 +93,7 @@ export function setupSocket(io: SocketIOServer): void {
       }
     });
 
+    // Contestar palpite: basic resolve na hora, advanced inicia fluxo de aposta
     socket.on("game:contest", () => {
       const room = getRoomBySocketId(socket.id);
       if (!room || room.status !== "playing") return;
@@ -181,6 +189,7 @@ export function setupSocket(io: SocketIOServer): void {
       }
     });
 
+    // Play Again com votacao: quando todos os conectados votam, reinicia automaticamente
     socket.on("game:playAgain", () => {
       const room = getRoomBySocketId(socket.id);
       if (!room) return;

@@ -1,3 +1,5 @@
+// Regra de ouro: cada palpite deve ser MAIOR que o anterior
+// Contestacao: palpite > resposta → desafiado leva | palpite <= resposta → desafiante leva
 import { Room, Guess, Card } from "./types";
 
 export function canGuess(room: Room, value: number): boolean {

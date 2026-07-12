@@ -1,3 +1,5 @@
+// Pontuacao: regra basica conta cartas, avancada conta Pontos de Pato - Dobrei
+// Desempate entre jogadores com mesma pontuacao: maior soma de Pato Points perde
 import { Player, RuleSet, GameResult } from "./types";
 
 function countPatoPoints(player: Player): number {
