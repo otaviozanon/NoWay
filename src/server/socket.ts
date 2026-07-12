@@ -127,8 +127,15 @@ export function setupSocket(io: SocketIOServer): void {
       if (!room?.activeContest?.querApostar) return;
       const playerId = getPlayerIdBySocketId(socket.id);
       if (playerId !== room.activeContest.challengerId) return;
-      const { cardCount } = handleQuerApostar(room, keep);
-      doResolve(room, room.activeContest.challengerId, room.activeContest.challengedId, io, cardCount);
+
+      if (keep) {
+        const { cardCount } = handleQuerApostar(room, true);
+        doResolve(room, room.activeContest.challengerId, room.activeContest.challengedId, io, cardCount);
+      } else {
+        const updated: Room = { ...room, activeContest: undefined };
+        setRoom(room.id, updated);
+        io.to(room.id).emit("room:state", updated);
+      }
     });
 
     socket.on("game:naMosca", () => {
