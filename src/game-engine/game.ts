@@ -1,3 +1,5 @@
+// Orquestracao do jogo: iniciar, avancar rodadas, distribuir cartas, verificar fim
+// 10 rodadas por partida. Cartas Dobrei anulam Pontos de Pato na contagem final.
 import { Room, Card, Player, GameResult } from "./types";
 import { buildGameResult } from "./scoring";
 

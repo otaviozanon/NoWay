@@ -1,3 +1,7 @@
+// Regras avancadas:
+// Dobrei: palpite >= 2x o anterior → ganha 1 Carta Dobrei (anula 1 Ponto de Pato)
+// Quer Apostar: desafiado intimida o desafiante → se manter, 2 cartas em jogo
+// Na Mosca: acertar o valor exato → ninguem perde; errar → leva TODAS as cartas
 import { Room, Card } from "./types";
 
 export function qualifiesForDobrei(room: Room, newGuessValue: number): boolean {

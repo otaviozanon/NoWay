@@ -1,3 +1,6 @@
+// Gerenciamento de salas: criar, entrar, sair, transferir host
+// Codigo da sala: 6 caracteres alfanumericos. Maximo 10 jogadores.
+// crypto.randomUUID() para IDs unicos de jogador.
 import { Room, Player, RuleSet } from "./types";
 import { shuffleDeck } from "./deck";
 

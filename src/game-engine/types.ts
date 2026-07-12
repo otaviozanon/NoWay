@@ -1,3 +1,8 @@
+// Tipos do jogo:
+// Card = carta de tema com 30 perguntas e 2-3 Pontos de Pato
+// Room = sala com jogadores, deck, palpites, estado da rodada
+// activeContest = estado da contestacao em andamento (modo avancado)
+// lastEvent = feedback visual da ultima acao (toast + resposta correta)
 export interface Question {
   text: string;
   answer: number;

@@ -1,4 +1,6 @@
-﻿import { Card } from "@/game-engine/types";
+﻿// 50 cartas de tema, 30 perguntas cada (1500 total). Todas com respostas inteiras.
+// patoPoints: 2 ou 3, usados na pontuacao das regras avancadas.
+import { Card } from "@/game-engine/types";
 
 export const cards: Card[] = [
   {

@@ -1,3 +1,5 @@
+// Servidor customizado: Next.js + Socket.IO na mesma porta
+// tsx server.mts → compila e serve em http://localhost:3000
 import { createServer } from "http";
 import { parse } from "url";
 import next from "next";

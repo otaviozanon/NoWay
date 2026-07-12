@@ -1,3 +1,5 @@
+// Gerenciamento do baralho: embaralhar, comprar, verificar disponibilidade
+// Fisher-Yates shuffle. 50 cartas, cada uma usada no maximo 1 vez por partida.
 import { Card } from "./types";
 import { cards } from "@/cards/data";
 

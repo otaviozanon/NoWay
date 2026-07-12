@@ -1,3 +1,5 @@
+// Armazenamento em memoria das salas e mapeamento socket ↔ jogador
+// Map<string, Room> para O(1) lookup. Sem persistencia (reinicia ao derrubar servidor).
 import { Room } from "@/game-engine/types";
 
 const rooms = new Map<string, Room>();

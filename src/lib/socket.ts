@@ -1,3 +1,5 @@
+// Singleton Socket.IO client: uma unica conexao por sessao
+// autoConnect: false para controlar manualmente quando conectar.
 import { io, Socket } from "socket.io-client";
 
 let socket: Socket | null = null;

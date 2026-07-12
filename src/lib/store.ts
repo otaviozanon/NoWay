@@ -1,3 +1,5 @@
+// Zustand store: estado global do cliente (sala, jogador, resultado, erros)
+// Socket.IO listeners sao registrados uma unica vez via flag module-level.
 import { create } from "zustand";
 import { Room, GameResult } from "@/game-engine/types";
 import { getSocket } from "./socket";
