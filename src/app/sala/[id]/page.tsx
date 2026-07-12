@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { getSocket } from "@/lib/socket";
 import { useGameStore } from "@/lib/store";
 import { Copy, Play, Users, Crown, Wifi, WifiOff } from "lucide-react";
+import RulesModal from "@/components/rules-modal";
 
 export const dynamic = "force-dynamic";
 
@@ -77,6 +78,7 @@ export default function RoomPage() {
         ) : (
           <div className="text-center py-6"><p className="text-text-muted text-sm animate-pulse">Aguardando o host iniciar a partida...</p></div>
         )}
+        <RulesModal />
       </div>
     </main>
   );

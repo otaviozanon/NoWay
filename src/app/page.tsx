@@ -6,6 +6,7 @@ import { connectSocket, getSocket } from "@/lib/socket";
 import { setupSocketListeners, useGameStore } from "@/lib/store";
 import { Room } from "@/game-engine/types";
 import { Users, LogIn, ArrowRight, Dice1, Dices } from "lucide-react";
+import RulesModal from "@/components/rules-modal";
 
 export default function HomePage() {
   const router = useRouter();
@@ -88,6 +89,7 @@ export default function HomePage() {
           <div className="px-5 py-4 rounded-xl bg-accent-danger/10 border border-accent-danger/20 text-accent-danger text-sm text-center animate-slide-up">{error}</div>
         ) : null}
       </div>
+      <RulesModal />
     </main>
   );
 }
