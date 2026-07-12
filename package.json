@@ -2,13 +2,23 @@
   "name": "nem-a-pato",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
+    "dev": "tsx server.mts",
     "build": "next build",
-    "start": "tsx server.ts",
+    "start": "tsx server.mts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "next lint"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.3.2",
+    "next": "^16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "socket.io": "^4.7.0",
+    "socket.io-client": "^4.7.0",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
@@ -21,7 +31,7 @@
     "postcss": "^8.5.17",
     "tailwindcss": "^4.3.2",
     "tsx": "^4.23.0",
-    "typescript": "^7.0.2",
+    "typescript": "7.0.2",
     "vitest": "^4.1.10"
   }
 }
