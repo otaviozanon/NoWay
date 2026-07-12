@@ -6,6 +6,8 @@ import { getSocket } from "@/lib/socket";
 import { useGameStore } from "@/lib/store";
 import { Copy, Play, Users, Crown, Wifi, WifiOff } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default function RoomPage() {
   const router = useRouter();
   const params = useParams();

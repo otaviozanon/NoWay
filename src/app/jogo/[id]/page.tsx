@@ -6,6 +6,8 @@ import { useGameStore, setupSocketListeners } from "@/lib/store";
 import { connectSocket } from "@/lib/socket";
 import GameBoard from "@/components/game-board";
 
+export const dynamic = "force-dynamic";
+
 export default function GamePage() {
   const router = useRouter();
   const { room } = useGameStore();
