@@ -8,7 +8,7 @@ describe("createRoom", () => {
     expect(room.host).toBe(room.players[0].id);
     expect(room.players[0].name).toBe("host");
     expect(room.status).toBe("waiting");
-    expect(room.deck).toHaveLength(80);
+    expect(room.deck).toHaveLength(50);
   });
 });
 

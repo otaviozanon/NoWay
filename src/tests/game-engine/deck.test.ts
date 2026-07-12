@@ -3,8 +3,8 @@ import { shuffleDeck, drawCard, getCurrentCard } from "@/game-engine/deck";
 import { cards } from "@/cards/data";
 
 describe("shuffleDeck", () => {
-  it("returns 80 cards", () => {
-    expect(shuffleDeck()).toHaveLength(80);
+  it("returns 50 cards", () => {
+    expect(shuffleDeck()).toHaveLength(50);
   });
 
   it("does not mutate original cards", () => {
@@ -22,7 +22,7 @@ describe("drawCard", () => {
 
   it("returns undefined out of bounds", () => {
     const deck = shuffleDeck();
-    expect(drawCard(deck, 80)).toBeUndefined();
+    expect(drawCard(deck, 50)).toBeUndefined();
   });
 });
 
