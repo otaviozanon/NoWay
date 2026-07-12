@@ -49,6 +49,7 @@ export interface Room {
     type: "contest" | "naMosca" | "dobrei";
     message: string;
     playerId: string;
+    answer?: number;
   };
 }
 

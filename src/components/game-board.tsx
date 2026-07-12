@@ -5,21 +5,28 @@ import { useGameStore } from "@/lib/store";
 import CardDisplay from "./card-display";
 import GuessSection from "./guess-section";
 import GameResultDisplay from "./game-result";
-import { MessageCircle, Users, X, Zap, Swords, Sparkles, ShieldAlert, Clock } from "lucide-react";
+import { MessageCircle, Users, X, Zap, Swords, Sparkles, ShieldAlert } from "lucide-react";
 
 function GameBoard() {
   const { room, myPlayerId, gameResult } = useGameStore();
   const [toast, setToast] = useState<{ message: string; type: string } | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [resultAnswer, setResultAnswer] = useState<number | null>(null);
 
   useEffect(() => {
     if (room?.lastEvent) {
       setToast({ message: room.lastEvent.message, type: room.lastEvent.type });
-      setShowResult(true);
-      setTimeout(() => {
-        setToast(null);
-        setShowResult(false);
-      }, 5000);
+      if (room.lastEvent.type === "contest" && room.lastEvent.answer != null) {
+        setShowResult(true);
+        setResultAnswer(room.lastEvent.answer);
+        setTimeout(() => {
+          setToast(null);
+          setShowResult(false);
+          setResultAnswer(null);
+        }, 6000);
+      } else {
+        setTimeout(() => setToast(null), 4000);
+      }
     }
   }, [room?.lastEvent]);
 
@@ -48,11 +55,13 @@ function GameBoard() {
 
       <CardDisplay card={card} questionIndex={0} round={room.currentRound} />
 
-      {showResult ? (
-        <div className="text-center py-6 animate-scale-in">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-danger/10 border border-accent-danger/20 text-accent-danger text-sm font-bold">
-            <Clock size={14} className="animate-pulse" />Proxima carta em instantes...
+      {showResult && resultAnswer != null ? (
+        <div className="text-center py-6 animate-scale-in space-y-3">
+          <div className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-surface-card border-2 border-brand/30">
+            <span className="text-text-muted text-sm">Resposta correta:</span>
+            <span className="text-brand-light font-black text-2xl font-mono tabular-nums">{resultAnswer.toLocaleString("pt-BR")}</span>
           </div>
+          <p className="text-text-muted text-xs animate-pulse">Proxima carta em instantes...</p>
         </div>
       ) : null}
       {room.guesses.length > 0 ? (

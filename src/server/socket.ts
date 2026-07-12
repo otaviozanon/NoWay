@@ -252,14 +252,16 @@ function doResolve(room: Room, challengerId: string, challengedId: string, io: S
   }
     const loser = updated.players.find(p => p.id === loserId);
     const totalCards = extraCards > 1 ? `${extraCards} cartas` : "1 carta";
-    updated = {
-      ...updated,
-      playAgainVotes: [],
-      lastEvent: {
-        type: "contest",
-        message: `${loser?.name || "Alguem"} levou ${totalCards}!`,
-        playerId: loserId,
-      }
+  const answer = card.questions[questionIndex].answer;
+  updated = {
+    ...updated,
+    playAgainVotes: [],
+    lastEvent: {
+      type: "contest",
+      message: `${loser?.name || "Alguem"} levou ${totalCards}!`,
+      playerId: loserId,
+      answer,
+    }
   };
   setRoom(room.id, updated);
   io.to(room.id).emit("room:state", updated);
