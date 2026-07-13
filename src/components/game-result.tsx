@@ -4,7 +4,8 @@ import { useMemo, useCallback, memo } from "react";
 import { GameResult } from "@/game-engine/types";
 import { calculateScore } from "@/game-engine/scoring";
 import { getSocket } from "@/lib/socket";
-import { Trophy, RotateCcw, CheckCircle2, XCircle, Users } from "lucide-react";
+import { Trophy, RotateCcw, CheckCircle2, ThumbsDown, Users } from "lucide-react";
+import { DuckIcon } from "./duck-icon";
 
 interface Props { result: GameResult; ruleSet: "basic" | "advanced"; myPlayerId: string | null; playAgainVotes: string[]; players: { id: string; name: string }[]; }
 
@@ -45,7 +46,7 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
               <div
                 className="absolute inset-0 w-28 h-28 rounded-full border-2 border-brand/30 bg-surface-card flex items-center justify-center animate-crown-entrance"
               >
-                <Trophy size={44} className="text-brand-light" />
+                <DuckIcon size={44} className="text-brand-light" />
               </div>
               {CONFETTI_DOTS.map((d, i) => (
                 <div
@@ -70,9 +71,9 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
 
             <div className="relative inline-block -rotate-3">
               <div className="relative bg-accent-danger/10 border-2 border-accent-danger/40 rounded-xl px-6 py-3 shadow-lg shadow-accent-danger/10">
-                <XCircle size={22} className="text-accent-danger absolute -top-2 -right-2" />
+                <ThumbsDown size={22} className="text-accent-danger absolute -top-2 -right-2" />
                 <p className="text-accent-danger font-black text-xl">
-                  Perdedor(a)! &middot; {scoreLabel}: {calculateScore(result.loser, ruleSet)}
+                  é o(a) PATO da partida!
                 </p>
               </div>
             </div>
@@ -107,7 +108,7 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
                     : "bg-surface-card"
               }`}>
                 {isLoser
-                  ? <XCircle size={16} className="text-accent-danger" />
+                  ? <ThumbsDown size={16} className="text-accent-danger" />
                   : isFirst
                     ? <Trophy size={16} className="text-accent-warning" />
                     : <span className="font-mono text-xs font-bold text-text-muted">#{i + 1}</span>
