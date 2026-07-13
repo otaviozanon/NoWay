@@ -21,8 +21,8 @@ describe("joinRoom", () => {
 
   it("throws when full", () => {
     let room = createRoom("host", "basic");
-    for (let i = 0; i < 9; i++) room = joinRoom(room, `p${i}`);
-    expect(room.players).toHaveLength(10);
+    for (let i = 0; i < 14; i++) room = joinRoom(room, `p${i}`);
+    expect(room.players).toHaveLength(15);
     expect(() => joinRoom(room, "extra")).toThrow("cheia");
   });
 
