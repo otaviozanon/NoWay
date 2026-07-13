@@ -10,6 +10,8 @@ import type { Card } from "@/game-engine/types";
 
 type ResultPhase = "idle" | "showing" | "exiting";
 
+const CARD_ANGLES = [-3, 0, 3];
+
 function GameBoard() {
   const { room, myPlayerId, gameResult } = useGameStore();
   const [toast, setToast] = useState<{ message: string; type: string } | null>(null);
@@ -154,13 +156,16 @@ function GameBoard() {
       <div className="space-y-1.5">
         <span className="text-[10px] text-text-muted font-bold uppercase tracking-widest flex items-center gap-1.5"><Users size={11} />Jogadores</span>
         <div className="grid grid-cols-2 gap-2">
-          {room.players.map((p) => {
+          {room.players.map((p, i) => {
             const active = cur?.id === p.id;
-            const cc = ["bg-yellow-500/30", "bg-orange-500/30", "bg-amber-600/30", "bg-brand/30", "bg-yellow-600/30", "bg-orange-600/30", "bg-amber-500/30", "bg-brand-light/30"];
             return (
-              <div key={p.id} className={`px-2.5 py-2 rounded-xl transition-all duration-300 ${
-                active ? "bg-brand/5 border border-brand/20 shadow-[0_0_20px_rgba(245,158,11,0.08)]" : "bg-surface-card border border-border"
-              }`}>
+              <div
+                key={p.id}
+                className={`px-2.5 py-2 rounded-xl transition-all duration-300 animate-slide-up ${
+                  active ? "bg-brand/5 border border-brand/20 shadow-[0_0_20px_rgba(245,158,11,0.08)]" : "bg-surface-card border border-border"
+                }`}
+                style={{ animationDelay: `${i * 50}ms`, animationFillMode: "both" }}
+              >
                 <div className="flex items-center justify-between gap-1 mb-1">
                   <span className={`truncate font-bold text-[11px] ${active ? "text-brand-light" : "text-text-primary"}`}>{p.name}</span>
                   {p.dobreiCards > 0 ? (
@@ -168,14 +173,28 @@ function GameBoard() {
                   ) : null}
                 </div>
                 {p.cards.length > 0 ? (
-                  <div className="flex gap-1 flex-wrap">
-                    {p.cards.slice(0, 6).map((c, ci) => (
-                      <div key={ci} className={`w-5 h-7 rounded border border-white/10 ${cc[ci % cc.length]} shadow-sm`} title={c.theme} />
-                    ))}
-                    {p.cards.length > 6 ? <span className="text-[10px] text-text-muted font-bold self-end ml-1">+{p.cards.length - 6}</span> : null}
+                  <div className="flex items-center">
+                    {p.cards.slice(0, 5).map((c, ci) => {
+                      const angle = CARD_ANGLES[ci % CARD_ANGLES.length];
+                      return (
+                        <div
+                          key={ci}
+                          className="w-4 h-6 rounded-[2px] bg-surface-card border border-brand/40 transition-all animate-card-in"
+                          style={{
+                            marginLeft: ci > 0 ? "-6px" : 0,
+                            rotate: `${angle}deg`,
+                            animationDelay: `${i * 50 + ci * 40}ms`,
+                          }}
+                          title={c.theme}
+                        />
+                      );
+                    })}
+                    {p.cards.length > 5 ? (
+                      <span className="text-[10px] text-text-muted font-bold ml-1">+{p.cards.length - 5}</span>
+                    ) : null}
                   </div>
                 ) : (
-                  <div className="h-7 flex items-center text-[10px] text-text-muted italic">limpo</div>
+                  <div className="h-6 flex items-center text-[10px] text-text-muted italic">limpo</div>
                 )}
               </div>
             );

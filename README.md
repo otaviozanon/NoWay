@@ -6,6 +6,10 @@
 <p align="center"><strong>Nem Ferrando!</strong> — Jogo de blefe e curiosidades</p>
 
 <p align="center">
+  <a href="https://nowaygame.onrender.com"><strong>🎮 JOGUE AQUI</strong></a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/jogadores-2%20a%2015-orange" />
   <img src="https://img.shields.io/badge/rodadas-10-yellow" />
   <img src="https://img.shields.io/badge/perguntas-1500-red" />

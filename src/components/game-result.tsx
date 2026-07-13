@@ -8,6 +8,17 @@ import { Trophy, RotateCcw, CheckCircle2, XCircle, Users } from "lucide-react";
 
 interface Props { result: GameResult; ruleSet: "basic" | "advanced"; myPlayerId: string | null; playAgainVotes: string[]; players: { id: string; name: string }[]; }
 
+const CARD_ANGLES = [-3, 0, 3];
+
+const CONFETTI_DOTS = [
+  { color: "bg-brand",            top: -4,  left: 28,  delay: 0 },
+  { color: "bg-accent-success",   top: 8,   right: -4,  delay: 0.25 },
+  { color: "bg-accent-warning",   bottom: 20, right: 4, delay: 0.45 },
+  { color: "bg-accent-danger",    bottom: -4, left: 24, delay: 0.65 },
+  { color: "bg-brand-light",      top: 44,  left: -6,  delay: 0.85 },
+  { color: "bg-brand-dark",       top: 28,  right: 22, delay: 1.05 },
+];
+
 function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, players }: Props) {
   const sorted = useMemo(() => [...result.players].sort((a, b) => calculateScore(a, ruleSet) - calculateScore(b, ruleSet)), [result.players, ruleSet]);
   const handlePlayAgain = useCallback(() => { getSocket().emit("game:playAgain"); }, []);
@@ -16,52 +27,136 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
   const scoreLabel = ruleSet === "advanced" ? "Pts Pato" : "Cartas";
 
   return (
-    <div className="space-y-4 animate-bounce-in">
-      <div className="text-center space-y-1.5">
-        <div className="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-accent-warning/20 to-brand/20 border border-accent-warning/20 flex items-center justify-center animate-float">
-          <Trophy size={26} className="text-accent-warning" />
-        </div>
-        <h2 className="text-2xl font-black text-text-primary tracking-tight">Fim de Jogo!</h2>
-      </div>
-
-      <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-accent-danger/5 to-surface-card border border-accent-danger/15">
-        <div className="w-12 h-12 rounded-full bg-accent-danger/10 border-2 border-accent-danger/20 flex items-center justify-center shrink-0">
-          <span className="text-xl font-black text-accent-danger">
-            {result.isTie ? "?" : result.loser.name.charAt(0)}
-          </span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-base font-bold text-accent-danger truncate">
-            {result.isTie ? "Empate!" : result.loser.name}
-          </div>
-          {result.isTie ? <p className="text-text-muted text-xs">Multiplos perdedores!</p> : (
-            <p className="text-text-muted text-xs">
-              Perdedor &middot; {scoreLabel}: {calculateScore(result.loser, ruleSet)}
+    <div className="space-y-8 animate-bounce-in">
+      <div className="text-center space-y-5">
+        {result.isTie ? (
+          <>
+            <h2 className="text-4xl font-black text-accent-warning"
+              style={{ textShadow: "0 0 24px rgba(234,179,8,0.4), 0 0 48px rgba(234,179,8,0.15)" }}>
+              Empate!
+            </h2>
+            <p className="text-text-secondary font-medium text-lg">
+              Multiplos perdedores!
             </p>
-          )}
-        </div>
-        <XCircle size={20} className="text-accent-danger/30 shrink-0" />
+          </>
+        ) : (
+          <>
+            <div className="relative mx-auto w-28 h-28">
+              <div
+                className="absolute inset-0 w-28 h-28 rounded-full border-2 border-brand/30 bg-surface-card flex items-center justify-center animate-crown-entrance"
+              >
+                <Trophy size={44} className="text-brand-light" />
+              </div>
+              {CONFETTI_DOTS.map((d, i) => (
+                <div
+                  key={i}
+                  className={`absolute w-3 h-3 rounded-full ${d.color} animate-confetti-bob`}
+                  style={{
+                    top: d.top !== undefined ? `${d.top}px` : undefined,
+                    left: d.left !== undefined ? `${d.left}px` : undefined,
+                    right: d.right !== undefined ? `${d.right}px` : undefined,
+                    bottom: d.bottom !== undefined ? `${d.bottom}px` : undefined,
+                    animationDelay: `${d.delay}s`,
+                    zIndex: 10,
+                  }}
+                />
+              ))}
+            </div>
+
+            <h2 className="text-5xl font-black text-accent-danger"
+              style={{ textShadow: "0 0 24px rgba(239,68,68,0.45), 0 0 48px rgba(239,68,68,0.2)" }}>
+              {result.loser.name}
+            </h2>
+
+            <div className="relative inline-block -rotate-3">
+              <div className="relative bg-accent-danger/10 border-2 border-accent-danger/40 rounded-xl px-6 py-3 shadow-lg shadow-accent-danger/10">
+                <XCircle size={22} className="text-accent-danger absolute -top-2 -right-2" />
+                <p className="text-accent-danger font-black text-xl">
+                  Perdedor(a)! &middot; {scoreLabel}: {calculateScore(result.loser, ruleSet)}
+                </p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-3">
+        <h3 className="text-sm text-text-muted font-medium px-1">Ranking</h3>
         {sorted.map((p, i) => {
           const isLoser = p.id === result.loser.id && !result.isTie;
+          const isFirst = i === 0;
+          const score = calculateScore(p, ruleSet);
+          const cardCount = p.cards.length;
           return (
-            <div key={p.id} className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-all duration-200 animate-slide-up ${isLoser ? "bg-accent-danger/5 border border-accent-danger/10" : "bg-surface-raised border border-border"}`} style={{ animationDelay: `${i * 60}ms` }}>
-              <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isLoser ? "bg-accent-danger/10" : "bg-accent-success/10"}`}>
-                {isLoser ? <XCircle size={14} className="text-accent-danger" /> : <CheckCircle2 size={14} className="text-accent-success" />}
+            <div
+              key={p.id}
+              className={`flex items-center gap-3 px-5 py-4 rounded-2xl border transition-all animate-slide-up ${
+                isLoser
+                  ? "border-accent-danger/30 bg-accent-danger/5"
+                  : isFirst
+                    ? "border-accent-success/20 bg-accent-success/5"
+                    : "border-border bg-surface-raised"
+              }`}
+              style={{ animationDelay: `${i * 80}ms`, animationFillMode: "both" }}
+            >
+              <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+                isLoser
+                  ? "bg-accent-danger/10"
+                  : isFirst
+                    ? "bg-accent-success/10"
+                    : "bg-surface-card"
+              }`}>
+                {isLoser
+                  ? <XCircle size={16} className="text-accent-danger" />
+                  : isFirst
+                    ? <Trophy size={16} className="text-accent-warning" />
+                    : <span className="font-mono text-xs font-bold text-text-muted">#{i + 1}</span>
+                }
               </div>
-              <div className="flex-1 min-w-0 flex items-baseline gap-1.5">
-                <span className={`font-semibold text-sm truncate ${isLoser ? "text-accent-danger" : "text-text-primary"}`}>{p.name}</span>
-                <span className="text-[11px] text-text-muted whitespace-nowrap">{p.cards.length} cartas</span>
+
+              <span className={`flex-1 font-semibold text-sm truncate ${
+                isLoser ? "text-accent-danger" : "text-text-primary"
+              }`}>
+                {p.name}
+              </span>
+
+              <div className="flex items-center">
+                {cardCount > 0 ? (
+                  <div className="flex items-center">
+                    {Array.from({ length: Math.min(cardCount, 6) }).map((_, ci) => {
+                      const angle = CARD_ANGLES[ci % CARD_ANGLES.length];
+                      return (
+                        <div
+                          key={ci}
+                          className={`w-4 h-6 rounded-[2px] border transition-all ${
+                            isLoser
+                              ? "bg-accent-danger/20 border-accent-danger/30"
+                              : isFirst
+                                ? "bg-accent-success/15 border-accent-success/30"
+                                : "bg-surface-card border-border"
+                          }`}
+                          style={{
+                            marginLeft: ci > 0 ? "-8px" : 0,
+                            rotate: `${angle}deg`,
+                            animationDelay: `${i * 80 + ci * 60}ms`,
+                          }}
+                        />
+                      );
+                    })}
+                    {cardCount > 6 && (
+                      <span className="text-[10px] text-text-muted font-bold ml-1">+{cardCount - 6}</span>
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-text-muted text-xs italic">0 cartas</span>
+                )}
               </div>
-              <div className="flex items-center gap-0.5">
-                {p.cards.slice(0, 4).map((_, ci) => (
-                  <div key={ci} className={`w-3.5 h-5 rounded-sm border ${isLoser ? "border-accent-danger/30 bg-accent-danger/10" : "border-border bg-surface-card"}`} />
-                ))}
-                {p.cards.length > 4 ? <span className="text-[9px] text-text-muted font-bold">+{p.cards.length - 4}</span> : null}
-              </div>
-              <span className="text-text-muted font-mono text-xs tabular-nums w-7 text-right">{calculateScore(p, ruleSet)}</span>
+
+              <span className={`font-bold text-sm min-w-[2.5rem] text-right ${
+                isLoser ? "text-accent-danger" : isFirst ? "text-accent-success" : "text-text-secondary"
+              }`}>
+                {score}
+              </span>
             </div>
           );
         })}
@@ -87,13 +182,18 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
         </div>
       </div>
 
-      {!hasVoted ? (
-        <button onClick={handlePlayAgain} className="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-xl bg-gradient-to-r from-brand to-brand-dark hover:from-brand-light hover:to-brand active:scale-[0.98] text-black font-bold text-base transition-all duration-200 touch-target shadow-xl shadow-brand/30">
-          <RotateCcw size={18} />Jogar Novamente
-        </button>
-      ) : (
-        <p className="text-center text-text-muted text-xs animate-pulse">Aguardando outros jogadores...</p>
-      )}
+      <button
+        onClick={handlePlayAgain}
+        disabled={hasVoted}
+        className={`w-full flex items-center justify-center gap-3 px-6 py-5 rounded-2xl font-bold text-lg transition-all duration-200 touch-target ${
+          hasVoted
+            ? "bg-surface-raised text-text-muted cursor-not-allowed border border-border"
+            : "bg-gradient-to-r from-brand to-brand-dark hover:from-brand-light hover:to-brand active:scale-[0.98] text-black font-black shadow-2xl shadow-brand/30"
+        }`}
+      >
+        <RotateCcw size={22} />
+        {hasVoted ? "Aguardando outros jogadores..." : "Jogar Novamente"}
+      </button>
     </div>
   );
 }
