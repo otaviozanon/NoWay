@@ -12,12 +12,12 @@ interface Props { result: GameResult; ruleSet: "basic" | "advanced"; myPlayerId:
 const CARD_ANGLES = [-3, 0, 3];
 
 const CONFETTI_DOTS = [
-  { color: "bg-brand",            top: -4,  left: 28,  delay: 0 },
-  { color: "bg-accent-success",   top: 8,   right: -4,  delay: 0.25 },
-  { color: "bg-accent-warning",   bottom: 20, right: 4, delay: 0.45 },
-  { color: "bg-accent-danger",    bottom: -4, left: 24, delay: 0.65 },
-  { color: "bg-brand-light",      top: 44,  left: -6,  delay: 0.85 },
-  { color: "bg-brand-dark",       top: 28,  right: 22, delay: 1.05 },
+  { color: "bg-brand",            top: 4,  left: 32,  delay: 0 },
+  { color: "bg-accent-success",   top: 16, right: 8,  delay: 0.25 },
+  { color: "bg-accent-warning",   bottom: 24, right: 16, delay: 0.45 },
+  { color: "bg-accent-danger",    bottom: 8, left: 28, delay: 0.65 },
+  { color: "bg-brand-light",      top: 48, left: 8,  delay: 0.85 },
+  { color: "bg-brand-dark",       top: 32, right: 28, delay: 1.05 },
 ];
 
 function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, players }: Props) {
@@ -28,7 +28,7 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
   const scoreLabel = ruleSet === "advanced" ? "Pts Pato" : "Cartas";
 
   return (
-    <div className="space-y-8 animate-bounce-in">
+    <div className="space-y-8 animate-bounce-in pt-8">
       <div className="text-center space-y-5">
         {result.isTie ? (
           <>
@@ -42,9 +42,9 @@ function GameResultDisplay({ result, ruleSet, myPlayerId, playAgainVotes, player
           </>
         ) : (
           <>
-            <div className="relative mx-auto w-28 h-28">
+            <div className="relative mx-auto w-36 h-36">
               <div
-                className="absolute inset-0 w-28 h-28 rounded-full border-2 border-brand/30 bg-surface-card flex items-center justify-center animate-crown-entrance"
+                className="absolute inset-0 w-28 h-28 rounded-full border-2 border-brand/30 bg-surface-card flex items-center justify-center animate-crown-entrance mx-auto my-4"
               >
                 <DuckIcon size={44} className="text-brand-light" />
               </div>
